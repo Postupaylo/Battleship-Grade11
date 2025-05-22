@@ -27,7 +27,7 @@ public class SwingSubsystem {
     boolean keyReady;
     boolean mousePressed;
     boolean cellPressed;
-    String shipMode = "destroyer";
+    String shipMode = "submarine";
     String shipDirection = "up";
     Ships.Destroyer destroyer;
     Ships.Submarine submarine;
@@ -196,7 +196,6 @@ public class SwingSubsystem {
                         gridX = xIndex;
                         gridY = yIndex;
                         setShipPosition(xCell, yCell, xIndex, yIndex);
-                        print(g, String.valueOf(keyIndex));
 
                         if (rectButton(g, (x - (width / 2) - xCell + (xIndex * (width / xCell))),
                                 (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell,
@@ -214,41 +213,166 @@ public class SwingSubsystem {
 
     public void setShipPosition(int xCell, int yCell, int xIndex,
             int yIndex) {
-        if (shipMode.equals("destroyer")) {
-            switch (shipDirection) {
-                case "up":
-                    if (yIndex == 0)
-                        yIndex++;
-                    destroyer.xPositions[0] = xIndex;
-                    destroyer.yPositions[0] = yIndex;
-                    destroyer.xPositions[1] = xIndex;
-                    destroyer.yPositions[1] = yIndex - 1;
-                    break;
-                case "right":
-                    if (xIndex == xCell - 1)
-                        xIndex--;
-                    destroyer.xPositions[0] = xIndex;
-                    destroyer.yPositions[0] = yIndex;
-                    destroyer.xPositions[1] = xIndex + 1;
-                    destroyer.yPositions[1] = yIndex;
-                    break;
-                case "down":
-                    if (yIndex == yCell - 1)
-                        yIndex--;
-                    destroyer.xPositions[0] = xIndex;
-                    destroyer.yPositions[0] = yIndex;
-                    destroyer.xPositions[1] = xIndex;
-                    destroyer.yPositions[1] = yIndex + 1;
-                    break;
-                case "left":
-                    if (xIndex == 0)
-                        xIndex++;
-                    destroyer.xPositions[0] = xIndex;
-                    destroyer.yPositions[0] = yIndex;
-                    destroyer.xPositions[1] = xIndex - 1;
-                    destroyer.yPositions[1] = yIndex;
-                    break;
-            }
+
+        switch (shipDirection) {
+            case "up":
+                switch (shipMode) {
+                    case "destroyer":
+                        if (yIndex == 0)
+                            yIndex++;
+                        for (int x = 0; x < destroyer.shipLength; x++) {
+                            destroyer.xPositions[x] = xIndex;
+                            destroyer.yPositions[x] = yIndex - x;
+                        }
+                        break;
+                    case "submarine":
+                        if (yIndex <= cruiser.shipLength)
+                            yIndex += submarine.shipLength - 1 - yIndex;
+
+                        for (int x = 0; x < submarine.shipLength; x++) {
+                            submarine.xPositions[x] = xIndex;
+                            submarine.yPositions[x] = yIndex - x;
+                        }
+                        break;
+                    case "cruiser":
+                        if (yIndex <= cruiser.shipLength)
+                            yIndex += cruiser.shipLength - 1 - yIndex;
+                        for (int x = 0; x < cruiser.shipLength; x++) {
+                            cruiser.xPositions[x] = xIndex;
+                            cruiser.yPositions[x] = yIndex - x;
+                        }
+                        break;
+                    case "battleship":
+                        if (yIndex <= battleship.shipLength)
+                            yIndex += battleship.shipLength - 1 - yIndex;
+                        for (int x = 0; x < battleship.shipLength; x++) {
+                            battleship.xPositions[x] = xIndex;
+                            battleship.yPositions[x] = yIndex - x;
+                        }
+                        break;
+                    case "carrier":
+                        if (yIndex <= carrier.shipLength)
+                            yIndex += carrier.shipLength - 1 - yIndex;
+                        for (int x = 0; x < carrier.shipLength; x++) {
+                            carrier.xPositions[x] = xIndex;
+                            carrier.yPositions[x] = yIndex - x;
+                        }
+                        break;
+                }
+                break;
+            case "right":
+                switch (shipMode) {
+                    case "destroyer":
+                        if (xIndex == xCell - destroyer.shipLength + 1)
+                            xIndex--;
+                        for (int x = 0; x < destroyer.shipLength; x++) {
+                            destroyer.xPositions[x] = xIndex + x;
+                            destroyer.yPositions[x] = yIndex;
+                        }
+                        break;
+                    case "submarine":
+                    if (xIndex >= xCell - submarine.shipLength + 1)
+                            xIndex -=2;
+                        for (int x = 0; x < submarine.shipLength; x++) {
+                            submarine.xPositions[x] = xIndex + x;
+                            submarine.yPositions[x] = yIndex;
+                        }
+                        break;
+                    case "curiser":
+                        for (int x = 0; x < cruiser.shipLength; x++) {
+                            cruiser.xPositions[x] = xIndex + x;
+                            cruiser.yPositions[x] = yIndex;
+                        }
+                        break;
+                    case "battleship":
+                        for (int x = 0; x < battleship.shipLength; x++) {
+                            battleship.xPositions[x] = xIndex + x;
+                            battleship.yPositions[x] = yIndex;
+                        }
+                        break;
+                    case "carrier":
+                        for (int x = 0; x < carrier.shipLength; x++) {
+                            carrier.xPositions[x] = xIndex + x;
+                            carrier.yPositions[x] = yIndex;
+                        }
+                        break;
+                }
+                break;
+            case "down":
+
+                switch (shipMode) {
+                    case "destroyer":
+                        if (yIndex == yCell - 1)
+                            yIndex--;
+                        for (int x = 0; x < destroyer.shipLength; x++) {
+                            destroyer.xPositions[x] = xIndex;
+                            destroyer.yPositions[x] = yIndex + x;
+                        }
+                        break;
+                    case "submarine":
+                        for (int x = 0; x < submarine.shipLength; x++) {
+                            submarine.xPositions[x] = xIndex;
+                            submarine.yPositions[x] = yIndex + x;
+                        }
+                        break;
+                    case "curiser":
+                        for (int x = 0; x < cruiser.shipLength; x++) {
+                            cruiser.xPositions[x] = xIndex;
+                            cruiser.yPositions[x] = yIndex + x;
+                        }
+                        break;
+                    case "battleship":
+                        for (int x = 0; x < battleship.shipLength; x++) {
+                            battleship.xPositions[x] = xIndex;
+                            battleship.yPositions[x] = yIndex + x;
+                        }
+                        break;
+                    case "carrier":
+                        for (int x = 0; x < carrier.shipLength; x++) {
+                            carrier.xPositions[x] = xIndex;
+                            carrier.yPositions[x] = yIndex + x;
+                        }
+                        break;
+                }
+                break;
+            case "left":
+
+                switch (shipMode) {
+                    case "destroyer":
+                        if (xIndex == 0)
+                            xIndex++;
+                        for (int x = 0; x < destroyer.shipLength; x++) {
+                            destroyer.xPositions[x] = xIndex - x;
+                            destroyer.yPositions[x] = yIndex;
+                        }
+                        break;
+                    case "submarine":
+                        for (int x = 0; x < submarine.shipLength; x++) {
+                            submarine.xPositions[x] = xIndex - x;
+                            submarine.yPositions[x] = yIndex;
+                        }
+                        break;
+                    case "curiser":
+                        for (int x = 0; x < cruiser.shipLength; x++) {
+                            cruiser.xPositions[x] = xIndex - x;
+                            cruiser.yPositions[x] = yIndex;
+                        }
+                        break;
+                    case "battleship":
+                        for (int x = 0; x < battleship.shipLength; x++) {
+                            battleship.xPositions[x] = xIndex - x;
+                            battleship.yPositions[x] = yIndex;
+                        }
+                        break;
+                    case "carrier":
+                        for (int x = 0; x < carrier.shipLength; x++) {
+                            carrier.xPositions[x] = xIndex - x;
+                            carrier.yPositions[x] = yIndex;
+                        }
+                        break;
+                }
+                break;
+
         }
     }
 
@@ -271,7 +395,7 @@ public class SwingSubsystem {
                 keyIndex = 1;
                 break;
         }
-        if(roundedRectButton(g, x - 200/2, y - 100/2, 200, 100, "destroyer", Color.BLACK, Color.WHITE, 25, 10)){
+        if (roundedRectButton(g, x - 200 / 2, y - 100 / 2, 200, 100, "destroyer", Color.BLACK, Color.WHITE, 25, 10)) {
             shipMode = "destroyer";
         }
     }
