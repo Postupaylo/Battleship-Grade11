@@ -296,7 +296,7 @@ public class SwingSubsystem {
                             submarine.yPositions[x] = yIndex;
                         }
                         break;
-                    case "curiser":
+                    case "cruiser":
                         if (xIndex >= xCell - cruiser.shipLength + 1)
                             xIndex -= Math.abs(xCell - xIndex - cruiser.shipLength);
                         for (int x = 0; x < cruiser.shipLength; x++) {
@@ -341,7 +341,7 @@ public class SwingSubsystem {
                             submarine.yPositions[x] = yIndex + x;
                         }
                         break;
-                    case "curiser":
+                    case "cruiser":
                         if (yIndex >= yCell - cruiser.shipLength + 1)
                             yIndex -= Math.abs(yCell - yIndex - cruiser.shipLength);
                         for (int x = 0; x < cruiser.shipLength; x++) {
@@ -386,7 +386,7 @@ public class SwingSubsystem {
                             submarine.yPositions[x] = yIndex;
                         }
                         break;
-                    case "curiser":
+                    case "cruiser":
                         if (xIndex < cruiser.shipLength)
                             xIndex += cruiser.shipLength - 1 - xIndex;
                         for (int x = 0; x < cruiser.shipLength; x++) {
