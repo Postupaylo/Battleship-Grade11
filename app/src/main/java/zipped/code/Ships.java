@@ -1,9 +1,13 @@
 package zipped.code;
 
+import java.awt.Color;
+
 public class Ships {
 
     class Destroyer {
+        Color shipColor = Color.red;
         int shipLength = 2;
+        boolean doRender = false;
         int[] xPositions = new int[shipLength];
         int[] yPositions = new int[shipLength];
 
@@ -25,7 +29,9 @@ public class Ships {
     }
 
     public class Submarine {
+        Color shipColor = Color.white;
         int shipLength = 3;
+        boolean doRender = false;
         int[] xPositions = new int[3];
         int[] yPositions = new int[3];
 
@@ -47,7 +53,9 @@ public class Ships {
     }
 
     public class Cruiser {
+        Color shipColor =  new Color(255,0,255);
         int shipLength = 3;
+        boolean doRender = false;
         int[] xPositions = new int[3];
         int[] yPositions = new int[3];
 
@@ -69,7 +77,9 @@ public class Ships {
     }
 
     public class Battleship {
+        Color shipColor = Color.green;
         int shipLength = 4;
+        boolean doRender = false;
         int[] xPositions = new int[4];
         int[] yPositions = new int[4];
 
@@ -91,7 +101,9 @@ public class Ships {
     }
 
     public class Carrier {
+        Color shipColor = Color.yellow;
         int shipLength = 5;
+        boolean doRender = false;
         int[] xPositions = new int[5];
         int[] yPositions = new int[5];
 

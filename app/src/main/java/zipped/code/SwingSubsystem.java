@@ -7,8 +7,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 
 public class SwingSubsystem {
@@ -27,7 +25,7 @@ public class SwingSubsystem {
     boolean keyReady;
     boolean mousePressed;
     boolean cellPressed;
-    String shipMode = "submarine";
+    String shipMode = "carrier";
     String shipDirection = "up";
     Ships.Destroyer destroyer;
     Ships.Submarine submarine;
@@ -110,6 +108,7 @@ public class SwingSubsystem {
 
         panel.setFocusable(true);
         panel.requestFocusInWindow();
+        panel.setBackground(Color.blue);
 
         frame.setIconImage(grug);
         frame.add(panel);
@@ -121,9 +120,10 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
-        drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.RED, true);
+        drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black, true);
         shipSelector(g, frame.getWidth() - 300 + 50,
                 frame.getHeight() / 2, 300, 600);
+        panel.repaint();
     }
 
     /**
@@ -159,35 +159,53 @@ public class SwingSubsystem {
                 ((Graphics2D) g).setStroke(new BasicStroke(5));
                 g.drawRect((x - (width / 2) - xCell + (xIndex * (width / xCell))),
                         (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell, height / yCell);
-                for (int destroyerIndex = 0; destroyerIndex < destroyer.shipLength; destroyerIndex++) {
-                    g.fillRect((x - (width / 2) - xCell + (destroyer.xPositions[destroyerIndex] * (width / xCell))),
-                            (y - (height / 2) - yCell + (destroyer.yPositions[destroyerIndex] * (height / yCell))),
-                            width / xCell,
-                            height / yCell);
+                if (destroyer.doRender) {
+                    for (int destroyerIndex = 0; destroyerIndex < destroyer.shipLength; destroyerIndex++) {
+                        g.setColor(destroyer.shipColor);
+                        g.fillRect((x - (width / 2) - xCell + (destroyer.xPositions[destroyerIndex] * (width / xCell))),
+                                (y - (height / 2) - yCell + (destroyer.yPositions[destroyerIndex] * (height / yCell))),
+                                width / xCell,
+                                height / yCell);
+
+                    }
                 }
-                for (int submarineIndex = 0; submarineIndex < submarine.shipLength; submarineIndex++) {
-                    g.fillRect((x - (width / 2) - xCell + (submarine.xPositions[submarineIndex] * (width / xCell))),
-                            (y - (height / 2) - yCell + (submarine.yPositions[submarineIndex] * (height / yCell))),
-                            width / xCell,
-                            height / yCell);
+                if (submarine.doRender) {
+                    for (int submarineIndex = 0; submarineIndex < submarine.shipLength; submarineIndex++) {
+                        g.setColor(submarine.shipColor);
+                        g.fillRect((x - (width / 2) - xCell + (submarine.xPositions[submarineIndex] * (width / xCell))),
+                                (y - (height / 2) - yCell + (submarine.yPositions[submarineIndex] * (height / yCell))),
+                                width / xCell,
+                                height / yCell);
+                    }
                 }
-                for (int cruiserIndex = 0; cruiserIndex < cruiser.shipLength; cruiserIndex++) {
-                    g.fillRect((x - (width / 2) - xCell + (cruiser.xPositions[cruiserIndex] * (width / xCell))),
-                            (y - (height / 2) - yCell + (cruiser.yPositions[cruiserIndex] * (height / yCell))),
-                            width / xCell,
-                            height / yCell);
+                if (cruiser.doRender) {
+                    for (int cruiserIndex = 0; cruiserIndex < cruiser.shipLength; cruiserIndex++) {
+                        g.setColor(cruiser.shipColor);
+                        g.fillRect((x - (width / 2) - xCell + (cruiser.xPositions[cruiserIndex] * (width / xCell))),
+                                (y - (height / 2) - yCell + (cruiser.yPositions[cruiserIndex] * (height / yCell))),
+                                width / xCell,
+                                height / yCell);
+                    }
                 }
-                for (int battleshipIndex = 0; battleshipIndex < battleship.shipLength; battleshipIndex++) {
-                    g.fillRect((x - (width / 2) - xCell + (battleship.xPositions[battleshipIndex] * (width / xCell))),
-                            (y - (height / 2) - yCell + (battleship.yPositions[battleshipIndex] * (height / yCell))),
-                            width / xCell,
-                            height / yCell);
+                if (battleship.doRender) {
+                    for (int battleshipIndex = 0; battleshipIndex < battleship.shipLength; battleshipIndex++) {
+                        g.setColor(battleship.shipColor);
+                        g.fillRect(
+                                (x - (width / 2) - xCell + (battleship.xPositions[battleshipIndex] * (width / xCell))),
+                                (y - (height / 2) - yCell
+                                        + (battleship.yPositions[battleshipIndex] * (height / yCell))),
+                                width / xCell,
+                                height / yCell);
+                    }
                 }
-                for (int carrierIndex = 0; carrierIndex < battleship.shipLength; carrierIndex++) {
-                    g.fillRect((x - (width / 2) - xCell + (carrier.xPositions[carrierIndex] * (width / xCell))),
-                            (y - (height / 2) - yCell + (carrier.yPositions[carrierIndex] * (height / yCell))),
-                            width / xCell,
-                            height / yCell);
+                if (carrier.doRender) {
+                    for (int carrierIndex = 0; carrierIndex < carrier.shipLength; carrierIndex++) {
+                        g.setColor(carrier.shipColor);
+                        g.fillRect((x - (width / 2) - xCell + (carrier.xPositions[carrierIndex] * (width / xCell))),
+                                (y - (height / 2) - yCell + (carrier.yPositions[carrierIndex] * (height / yCell))),
+                                width / xCell,
+                                height / yCell);
+                    }
                 }
                 if (mouseX > (x - (width / 2) - xCell + (xIndex * (width / xCell)))
                         && mouseX < (x - (width / 2) - xCell + (xIndex * (width / xCell))) + width / xCell) {
@@ -202,7 +220,7 @@ public class SwingSubsystem {
                                 height / yCell,
                                 "Click me!", cellColor, lineColor, 7)) {
                             cellPressed = true;
-                            shipMode = "asd";
+                            shipMode = "noBoatSelected";
 
                         }
                     }
@@ -226,7 +244,7 @@ public class SwingSubsystem {
                         }
                         break;
                     case "submarine":
-                        if (yIndex <= cruiser.shipLength)
+                        if (yIndex < cruiser.shipLength)
                             yIndex += submarine.shipLength - 1 - yIndex;
 
                         for (int x = 0; x < submarine.shipLength; x++) {
@@ -235,7 +253,7 @@ public class SwingSubsystem {
                         }
                         break;
                     case "cruiser":
-                        if (yIndex <= cruiser.shipLength)
+                        if (yIndex < cruiser.shipLength)
                             yIndex += cruiser.shipLength - 1 - yIndex;
                         for (int x = 0; x < cruiser.shipLength; x++) {
                             cruiser.xPositions[x] = xIndex;
@@ -243,7 +261,7 @@ public class SwingSubsystem {
                         }
                         break;
                     case "battleship":
-                        if (yIndex <= battleship.shipLength)
+                        if (yIndex < battleship.shipLength)
                             yIndex += battleship.shipLength - 1 - yIndex;
                         for (int x = 0; x < battleship.shipLength; x++) {
                             battleship.xPositions[x] = xIndex;
@@ -251,7 +269,7 @@ public class SwingSubsystem {
                         }
                         break;
                     case "carrier":
-                        if (yIndex <= carrier.shipLength)
+                        if (yIndex < carrier.shipLength)
                             yIndex += carrier.shipLength - 1 - yIndex;
                         for (int x = 0; x < carrier.shipLength; x++) {
                             carrier.xPositions[x] = xIndex;
@@ -271,26 +289,32 @@ public class SwingSubsystem {
                         }
                         break;
                     case "submarine":
-                    if (xIndex >= xCell - submarine.shipLength + 1)
-                            xIndex -=2;
+                        if (xIndex >= xCell - submarine.shipLength + 1)
+                            xIndex -= Math.abs(xCell - xIndex - submarine.shipLength);
                         for (int x = 0; x < submarine.shipLength; x++) {
                             submarine.xPositions[x] = xIndex + x;
                             submarine.yPositions[x] = yIndex;
                         }
                         break;
                     case "curiser":
+                        if (xIndex >= xCell - cruiser.shipLength + 1)
+                            xIndex -= Math.abs(xCell - xIndex - cruiser.shipLength);
                         for (int x = 0; x < cruiser.shipLength; x++) {
                             cruiser.xPositions[x] = xIndex + x;
                             cruiser.yPositions[x] = yIndex;
                         }
                         break;
                     case "battleship":
+                        if (xIndex >= xCell - battleship.shipLength + 1)
+                            xIndex -= Math.abs(xCell - xIndex - battleship.shipLength);
                         for (int x = 0; x < battleship.shipLength; x++) {
                             battleship.xPositions[x] = xIndex + x;
                             battleship.yPositions[x] = yIndex;
                         }
                         break;
                     case "carrier":
+                        if (xIndex >= xCell - carrier.shipLength + 1)
+                            xIndex -= Math.abs(xCell - xIndex - carrier.shipLength);
                         for (int x = 0; x < carrier.shipLength; x++) {
                             carrier.xPositions[x] = xIndex + x;
                             carrier.yPositions[x] = yIndex;
@@ -310,24 +334,32 @@ public class SwingSubsystem {
                         }
                         break;
                     case "submarine":
+                        if (yIndex >= yCell - submarine.shipLength + 1)
+                            yIndex -= Math.abs(yCell - yIndex - submarine.shipLength);
                         for (int x = 0; x < submarine.shipLength; x++) {
                             submarine.xPositions[x] = xIndex;
                             submarine.yPositions[x] = yIndex + x;
                         }
                         break;
                     case "curiser":
+                        if (yIndex >= yCell - cruiser.shipLength + 1)
+                            yIndex -= Math.abs(yCell - yIndex - cruiser.shipLength);
                         for (int x = 0; x < cruiser.shipLength; x++) {
                             cruiser.xPositions[x] = xIndex;
                             cruiser.yPositions[x] = yIndex + x;
                         }
                         break;
                     case "battleship":
+                        if (yIndex >= yCell - battleship.shipLength + 1)
+                            yIndex -= Math.abs(yCell - yIndex - battleship.shipLength);
                         for (int x = 0; x < battleship.shipLength; x++) {
                             battleship.xPositions[x] = xIndex;
                             battleship.yPositions[x] = yIndex + x;
                         }
                         break;
                     case "carrier":
+                        if (yIndex >= yCell - carrier.shipLength + 1)
+                            yIndex -= Math.abs(yCell - yIndex - carrier.shipLength);
                         for (int x = 0; x < carrier.shipLength; x++) {
                             carrier.xPositions[x] = xIndex;
                             carrier.yPositions[x] = yIndex + x;
@@ -347,24 +379,32 @@ public class SwingSubsystem {
                         }
                         break;
                     case "submarine":
+                        if (xIndex < submarine.shipLength)
+                            xIndex += submarine.shipLength - 1 - xIndex;
                         for (int x = 0; x < submarine.shipLength; x++) {
                             submarine.xPositions[x] = xIndex - x;
                             submarine.yPositions[x] = yIndex;
                         }
                         break;
                     case "curiser":
+                        if (xIndex < cruiser.shipLength)
+                            xIndex += cruiser.shipLength - 1 - xIndex;
                         for (int x = 0; x < cruiser.shipLength; x++) {
                             cruiser.xPositions[x] = xIndex - x;
                             cruiser.yPositions[x] = yIndex;
                         }
                         break;
                     case "battleship":
+                        if (xIndex < battleship.shipLength)
+                            xIndex += battleship.shipLength - 1 - xIndex;
                         for (int x = 0; x < battleship.shipLength; x++) {
                             battleship.xPositions[x] = xIndex - x;
                             battleship.yPositions[x] = yIndex;
                         }
                         break;
                     case "carrier":
+                        if (xIndex < carrier.shipLength)
+                            xIndex += carrier.shipLength - 1 - xIndex;
                         for (int x = 0; x < carrier.shipLength; x++) {
                             carrier.xPositions[x] = xIndex - x;
                             carrier.yPositions[x] = yIndex;
@@ -395,9 +435,27 @@ public class SwingSubsystem {
                 keyIndex = 1;
                 break;
         }
-        if (roundedRectButton(g, x - 200 / 2, y - 100 / 2, 200, 100, "destroyer", Color.BLACK, Color.WHITE, 25, 10)) {
+        if (roundedRectButton(g, x - 200 / 2, (y - (y/5)) + y/2, 200, y/5, "destroyer", Color.BLACK, destroyer.shipColor, 25, 10)) {
             shipMode = "destroyer";
+            destroyer.doRender = true;
         }
+        if (roundedRectButton(g, x - 200 / 2, (y - (y/5) * 2) + y/2, 200, y/5, "submarine", Color.BLACK, submarine.shipColor, 25, 10)) {
+            shipMode = "submarine";
+            submarine.doRender = true;
+        }
+        if (roundedRectButton(g, x - 200 / 2, (y - (y/5) * 3) + y/2, 200, y/5, "cruiser", Color.BLACK, cruiser.shipColor, 25, 10)) {
+            shipMode = "cruiser";
+            cruiser.doRender = true;
+        }
+        if (roundedRectButton(g, x - 200 / 2, (y - (y/5) * 4) + y/2, 200, y/5, "battleship", Color.BLACK, battleship.shipColor, 25, 10)) {
+            shipMode = "battleship";
+            battleship.doRender = true;
+        }
+        if (roundedRectButton(g, x - 200 / 2, (y - (y/5) * 5) + y/2, 200, y/5, "carrier", Color.BLACK, carrier.shipColor, 25, 10)) {
+            shipMode = "carrier";
+            carrier.doRender = true;
+        }
+
     }
 
     public void print(Graphics g, String text) {
