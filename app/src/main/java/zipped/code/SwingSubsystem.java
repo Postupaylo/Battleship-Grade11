@@ -120,8 +120,8 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
-        drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black, true);
-        shipSelector(g, frame.getWidth() - 250 / 2 - 40,
+        drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black, true);
+        shipSelector(g, frame.getWidth() - 250 / 2 - 50,
                 frame.getHeight() / 2, 250, 500);
         panel.repaint();
     }
