@@ -26,6 +26,7 @@ public class SwingSubsystem {
     boolean mousePressed;
     boolean cellPressed;
     boolean switchBoat;
+    boolean startScreen = true;
     String shipMode = "carrier";
     String shipDirection = "up";
     Ships.Destroyer destroyer;
@@ -121,10 +122,15 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
-        drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black, true);
-        shipSelector(g, frame.getWidth() - 250 / 2 - 50,
-                frame.getHeight() / 2, 250, 500);
-        panel.repaint();
+        // drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black, true);
+        // shipSelector(g, frame.getWidth() - 250 / 2 - 50,
+        //         frame.getHeight() / 2, 250, 500);
+        // panel.repaint();
+       
+       if (startScreen) {
+        startMenu(g);
+       } 
+        
     }
 
     /**
@@ -741,7 +747,11 @@ public class SwingSubsystem {
 
     public void startMenu(Graphics g) {
         drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
+        if(roundedRectButton(g, frame.getWidth()/2, frame.getHeight()/2, 70, 30, "Start!", Color.BLACK, Color.YELLOW, 20, 10 )){
+            startScreen = false;
 
+        }
+        
     }
 
 }
