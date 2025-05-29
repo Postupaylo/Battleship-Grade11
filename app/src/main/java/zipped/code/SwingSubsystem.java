@@ -28,6 +28,7 @@ public class SwingSubsystem {
     boolean modeSelectScreen = true;
     boolean playerScreen;
     boolean compScreen;
+    boolean switchBoat;
     String shipMode = "carrier";
     String shipDirection = "up";
     Ships.Destroyer destroyer;
@@ -232,8 +233,120 @@ public class SwingSubsystem {
                                 (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell,
                                 height / yCell,
                                 "Click me!", cellColor, lineColor, 7)) {
+                            switchBoat = true;
+                            for (int destroyerLength = 0; destroyerLength < destroyer.shipLength; destroyerLength++) {
+                                for (int submarineLength = 0; submarineLength < submarine.shipLength; submarineLength++) {
+                                    for (int cruiserLength = 0; cruiserLength < cruiser.shipLength; cruiserLength++) {
+                                        for (int battleshipLength = 0; battleshipLength < battleship.shipLength; battleshipLength++) {
+                                            for (int carrierLength = 0; carrierLength < carrier.shipLength; carrierLength++) {
+                                                switch (shipMode) {
+                                                    case "destroyer":
+                                                        if (destroyer.xPositions[destroyerLength] == submarine.xPositions[submarineLength]
+                                                                && destroyer.yPositions[destroyerLength] == submarine.yPositions[submarineLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (destroyer.xPositions[destroyerLength] == cruiser.xPositions[cruiserLength]
+                                                                && destroyer.yPositions[destroyerLength] == cruiser.yPositions[cruiserLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (destroyer.xPositions[destroyerLength] == battleship.xPositions[battleshipLength]
+                                                                && destroyer.yPositions[destroyerLength] == battleship.yPositions[battleshipLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (destroyer.xPositions[destroyerLength] == carrier.xPositions[carrierLength]
+                                                                && destroyer.yPositions[destroyerLength] == carrier.yPositions[carrierLength]) {
+                                                            switchBoat = false;
+                                                        }
+
+                                                        break;
+                                                    case "submarine":
+                                                        if (submarine.xPositions[submarineLength] == destroyer.xPositions[destroyerLength]
+                                                                && submarine.yPositions[submarineLength] == destroyer.yPositions[destroyerLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (submarine.xPositions[submarineLength] == cruiser.xPositions[cruiserLength]
+                                                                && submarine.yPositions[submarineLength] == cruiser.yPositions[cruiserLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (submarine.xPositions[submarineLength] == battleship.xPositions[battleshipLength]
+                                                                && submarine.yPositions[submarineLength] == battleship.yPositions[battleshipLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (submarine.xPositions[submarineLength] == carrier.xPositions[carrierLength]
+                                                                && submarine.yPositions[submarineLength] == carrier.yPositions[carrierLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        break;
+                                                    case "cruiser":
+                                                        if (cruiser.xPositions[cruiserLength] == destroyer.xPositions[destroyerLength]
+                                                                && cruiser.yPositions[cruiserLength] == destroyer.yPositions[destroyerLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (cruiser.xPositions[cruiserLength] == submarine.xPositions[submarineLength]
+                                                                && cruiser.yPositions[cruiserLength] == submarine.yPositions[submarineLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (cruiser.xPositions[cruiserLength] == battleship.xPositions[battleshipLength]
+                                                                && cruiser.yPositions[cruiserLength] == battleship.yPositions[battleshipLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (cruiser.xPositions[cruiserLength] == carrier.xPositions[carrierLength]
+                                                                && cruiser.yPositions[cruiserLength] == carrier.yPositions[carrierLength]) {
+                                                            switchBoat = false;
+                                                        }
+
+                                                        break;
+                                                    case "battleship":
+                                                        if (battleship.xPositions[battleshipLength] == destroyer.xPositions[destroyerLength]
+                                                                && battleship.yPositions[battleshipLength] == destroyer.yPositions[destroyerLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (battleship.xPositions[battleshipLength] == submarine.xPositions[submarineLength]
+                                                                && battleship.yPositions[battleshipLength] == submarine.yPositions[submarineLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (battleship.xPositions[battleshipLength] == cruiser.xPositions[cruiserLength]
+                                                                && battleship.yPositions[battleshipLength] == cruiser.yPositions[cruiserLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (battleship.xPositions[battleshipLength] == carrier.xPositions[carrierLength]
+                                                                && battleship.yPositions[battleshipLength] == carrier.yPositions[carrierLength]) {
+                                                            switchBoat = false;
+                                                        }
+
+                                                        break;
+                                                    case "carrier":
+                                                        if (carrier.xPositions[carrierLength] == destroyer.xPositions[destroyerLength]
+                                                                && carrier.yPositions[carrierLength] == destroyer.yPositions[destroyerLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (carrier.xPositions[carrierLength] == submarine.xPositions[submarineLength]
+                                                                && carrier.yPositions[carrierLength] == submarine.yPositions[submarineLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (carrier.xPositions[carrierLength] == cruiser.xPositions[cruiserLength]
+                                                                && carrier.yPositions[carrierLength] == cruiser.yPositions[cruiserLength]) {
+                                                            switchBoat = false;
+                                                        }
+                                                        if (carrier.xPositions[carrierLength] == battleship.xPositions[battleshipLength]
+                                                                && carrier.yPositions[carrierLength] == battleship.yPositions[battleshipLength]) {
+                                                            switchBoat = false;
+                                                        }
+
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
                             cellPressed = true;
-                            shipMode = "noBoatSelected";
+                            if (switchBoat) {
+                                shipMode = "noBoatSelected";
+                            }
 
                         }
                     }
@@ -667,4 +780,9 @@ public class SwingSubsystem {
             modeSelectScreen = true;
         }
     }
+    public void startMenu(Graphics g) {
+        drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
+
+    }
+
 }
