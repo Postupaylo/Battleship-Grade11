@@ -33,6 +33,11 @@ public class SwingSubsystem {
     Ships.Cruiser cruiser;
     Ships.Battleship battleship;
     Ships.Carrier carrier;
+    Ships.Destroyer destroyer2;
+    Ships.Submarine submarine2;
+    Ships.Cruiser cruiser2;
+    Ships.Battleship battleship2;
+    Ships.Carrier carrier2;
 
     public SwingSubsystem() {
         destroyer = ships.new Destroyer();
@@ -121,9 +126,13 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
-        drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black, true);
-        shipSelector(g, frame.getWidth() - 250 / 2 - 50,
-                frame.getHeight() / 2, 250, 500);
+        // drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
+        // 10, Color.black, Color.black,
+        // true);
+        // shipSelector(g, frame.getWidth() - 250 / 2 - 50,
+        // frame.getHeight() / 2, 250, 500);
+        drawSecondGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black,
+                true);
         panel.repaint();
     }
 
@@ -152,6 +161,7 @@ public class SwingSubsystem {
      *                      effect
      *
      */
+    // region Draw Grid
     public void drawGrid(Graphics g, int x, int y, int width, int height, int xCell, int yCell, int lineThickness,
             Color lineColor, Color cellColor, boolean doHoverEffect) {
         for (int xIndex = 0; xIndex < xCell; xIndex++) {
@@ -342,6 +352,8 @@ public class SwingSubsystem {
         }
     }
 
+    // endregion
+    // region Set Ship Rotations
     public void setShipPosition(int xCell, int yCell, int xIndex,
             int yIndex) {
 
@@ -529,6 +541,8 @@ public class SwingSubsystem {
         }
     }
 
+    // endregion
+    // region Ship Selector
     public void shipSelector(Graphics g, int x, int y, int width, int height) {
         drawRect(g, x, y, width, height, Color.BLACK, true);
         switch (keyIndex) {
@@ -576,11 +590,37 @@ public class SwingSubsystem {
 
     }
 
+    // endregion
+    // region Enemy Grid
+    public void drawSecondGrid(Graphics g, int x, int y, int width, int height, int xCell, int yCell, int lineThickness,
+            Color lineColor, Color cellColor, boolean doHoverEffect) {
+        for (int xIndex = 0; xIndex < xCell; xIndex++) {
+            for (int yIndex = 0; yIndex < yCell; yIndex++) {
+                g.setColor(cellColor);
+                ((Graphics2D) g).setStroke(new BasicStroke(5));
+                g.drawRect((x - (width / 2) - xCell + (xIndex * (width / xCell))),
+                        (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell, height / yCell);
+                if (mouseX > (x - (width / 2) - xCell + (xIndex * (width / xCell)))
+                        && mouseX < (x - (width / 2) - xCell + (xIndex * (width / xCell))) + width / xCell) {
+                    if (mouseY > (y - (height / 2) - yCell + (yIndex * (height / yCell)))
+                            && mouseY < (y - (height / 2) - yCell + (yIndex * (height / yCell))) + height / yCell) {
+                        gridX = xIndex;
+                        gridY = yIndex;
+                        if (rectButton(g, (x - (width / 2) - xCell + (xIndex * (width / xCell))),
+                                (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell,
+                                height / yCell,
+                                "Click me!", cellColor, lineColor, 7)) {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // endregion
+
     public void print(Graphics g, String text) {
         drawCenteredText(g, text, frame.getWidth() / 2, 20, 10, Color.BLACK, "Arial");
-    }
-
-    public void drawShip() {
     }
 
     public int getGridX() {
@@ -589,6 +629,10 @@ public class SwingSubsystem {
 
     public int getGridY() {
         return gridY;
+    }
+
+    public void drawCross(int x, int y){
+        
     }
 
     /**
