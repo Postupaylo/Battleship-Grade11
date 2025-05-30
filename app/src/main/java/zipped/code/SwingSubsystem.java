@@ -25,7 +25,7 @@ public class SwingSubsystem {
     boolean keyReady;
     boolean mousePressed;
     boolean cellPressed;
-    boolean modeSelectScreen = true;
+    boolean modeSelectScreen;
     boolean playerScreen;
     boolean compScreen;
     boolean switchBoat;
@@ -125,6 +125,9 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
+        if(startScreen){
+            startMenu(g);
+        }
         if (modeSelectScreen) {
             modeSelectMenu(g);
         }
@@ -785,7 +788,7 @@ public class SwingSubsystem {
         drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
         if(roundedRectButton(g, frame.getWidth()/2, frame.getHeight()/2, 70, 30, "Start!", Color.BLACK, Color.YELLOW, 20, 10 )){
             startScreen = false;
-
+            modeSelectScreen = true;
         }
         
     }
