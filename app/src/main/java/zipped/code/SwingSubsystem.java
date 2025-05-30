@@ -26,6 +26,7 @@ public class SwingSubsystem {
     boolean mousePressed;
     boolean cellPressed;
     boolean switchBoat;
+    String gameScreen = "startScreen";
     String shipMode = "carrier";
     String shipDirection = "up";
     Ships.Destroyer destroyer;
@@ -126,13 +127,24 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
-        // drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
-        // 10, Color.black, Color.black,
-        // true);
-        // shipSelector(g, frame.getWidth() - 250 / 2 - 50,
-        // frame.getHeight() / 2, 250, 500);
-        drawSecondGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black,
-                true);
+        switch (gameScreen) {
+            case "startScreen":
+                startMenu(g);
+                break;
+            case "modeSelectScreen":
+                modeSelectMenu(g);
+                break;
+            case "playerScreen":
+                drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
+                        10, Color.black, Color.black,
+                        true);
+                shipSelector(g, frame.getWidth() - 250 / 2 - 50,
+                        frame.getHeight() / 2, 250, 500);
+                break;
+            case "compScreen":
+                compMenu(g);
+                break;
+        }
         panel.repaint();
     }
 
@@ -142,7 +154,7 @@ public class SwingSubsystem {
      * The grid comes with a built in "hovering" function that will highlight the
      * cell the mouse is hovering over.
      * Use {@link #getGridX() } and {@link #getGridY()} to get the selected cell
-     * 
+     *
      * @param g             is the graphics of the panel
      * @param x             The x position of the grid, it is the top left corner
      *                      unless centerAroundPoint is true, in which case its the
@@ -637,7 +649,7 @@ public class SwingSubsystem {
 
     /**
      * A rectangluar button that returns its state, pressed or not
-     * 
+     *
      * @param g           is the graphics of the panel
      * @param x           being the x position
      * @param y           being the y position
@@ -784,8 +796,36 @@ public class SwingSubsystem {
     }
 
     public void startMenu(Graphics g) {
+        panel.setBackground(Color.ORANGE);
         drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
-
+        if (roundedRectButton(g, frame.getWidth() / 2, frame.getHeight() / 2, 70, 30, "Start!", Color.BLACK,
+                Color.YELLOW, 20, 10)) {
+            gameScreen = "modeSelectScreen";
+        }
     }
 
+    public void modeSelectMenu(Graphics g) {
+        panel.setBackground(Color.blue);
+        drawCenteredText(g, "Select Game Mode", frame.getWidth() / 2, frame.getHeight() / 3, 100, Color.BLACK, "Arial");
+        if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 - 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
+                "Player",
+                Color.BLACK, Color.WHITE, 40, 13)) {
+            gameScreen = "playerScreen";
+        }
+        if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 + 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
+                "Comp",
+                Color.BLACK, Color.WHITE, 40, 13)) {
+            gameScreen = "compScreen";
+        }
+        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
+            gameScreen = "startScreen";
+        }
+    }
+
+    public void compMenu(Graphics g) {
+        panel.setBackground(Color.RED);
+        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
+            gameScreen = "modeSelectScreen";
+        }
+    }
 }
