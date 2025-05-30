@@ -25,11 +25,8 @@ public class SwingSubsystem {
     boolean keyReady;
     boolean mousePressed;
     boolean cellPressed;
-    boolean modeSelectScreen;
-    boolean playerScreen;
-    boolean compScreen;
     boolean switchBoat;
-    boolean startScreen = true;
+    String gameScreen = "startScreen";
     String shipMode = "carrier";
     String shipDirection = "up";
     Ships.Destroyer destroyer;
@@ -125,21 +122,23 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
-        if(startScreen){
-            startMenu(g);
-        }
-        if (modeSelectScreen) {
-            modeSelectMenu(g);
-        }
-        if (playerScreen) {
-            drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
-                    10, Color.black, Color.black,
-                    true);
-            shipSelector(g, frame.getWidth() - 250 / 2 - 50,
-                    frame.getHeight() / 2, 250, 500);
-        }
-        if (compScreen) {
-            compMenu(g);
+        switch (gameScreen) {
+            case "startScreen":
+                startMenu(g);
+                break;
+            case "modeSelectScreen":
+                modeSelectMenu(g);
+                break;
+            case "playerScreen":
+                drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
+                        10, Color.black, Color.black,
+                        true);
+                shipSelector(g, frame.getWidth() - 250 / 2 - 50,
+                        frame.getHeight() / 2, 250, 500);
+                break;
+            case "compScreen":
+                compMenu(g);
+                break;
         }
         panel.repaint();
     }
@@ -756,41 +755,37 @@ public class SwingSubsystem {
         return x > objectX && x < objectX + width && y > objectY && y < objectY + height;
     }
 
+    public void startMenu(Graphics g) {
+        panel.setBackground(Color.ORANGE);
+        drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
+        if (roundedRectButton(g, frame.getWidth() / 2, frame.getHeight() / 2, 70, 30, "Start!", Color.BLACK,
+                Color.YELLOW, 20, 10)) {
+            gameScreen = "modeSelectScreen";
+        }
+    }
+
     public void modeSelectMenu(Graphics g) {
-        panel.setBackground(Color.MAGENTA);
+        panel.setBackground(Color.blue);
         drawCenteredText(g, "Select Game Mode", frame.getWidth() / 2, frame.getHeight() / 3, 100, Color.BLACK, "Arial");
         if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 - 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
                 "Player",
                 Color.BLACK, Color.WHITE, 40, 13)) {
-            modeSelectScreen = false;
-            playerScreen = true;
+            gameScreen = "playerScreen";
         }
         if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 + 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
                 "Comp",
                 Color.BLACK, Color.WHITE, 40, 13)) {
-            modeSelectScreen = false;
-            compScreen = true;
+            gameScreen = "compScreen";
         }
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
-            modeSelectScreen = false;
-            modeSelectScreen = true;
+            gameScreen = "startScreen";
         }
     }
 
     public void compMenu(Graphics g) {
         panel.setBackground(Color.RED);
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
-            compScreen = false;
-            modeSelectScreen = true;
+            gameScreen = "modeSelectScreen";
         }
     }
-    public void startMenu(Graphics g) {
-        drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
-        if(roundedRectButton(g, frame.getWidth()/2, frame.getHeight()/2, 70, 30, "Start!", Color.BLACK, Color.YELLOW, 20, 10 )){
-            startScreen = false;
-            modeSelectScreen = true;
-        }
-        
-    }
-
 }
