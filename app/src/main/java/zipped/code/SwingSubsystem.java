@@ -39,6 +39,7 @@ public class SwingSubsystem {
     Ships.Cruiser cruiser2;
     Ships.Battleship battleship2;
     Ships.Carrier carrier2;
+    final String playerDetailsScreen = "playerDetailsScreen";
 
     public SwingSubsystem() {
         destroyer = ships.new Destroyer();
@@ -133,6 +134,9 @@ public class SwingSubsystem {
                 break;
             case "modeSelectScreen":
                 modeSelectMenu(g);
+                break;
+            case playerDetailsScreen:
+                getPlayerDetails(g);
                 break;
             case "playerScreen":
                 drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
@@ -810,7 +814,7 @@ public class SwingSubsystem {
         if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 - 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
                 "Player",
                 Color.BLACK, Color.WHITE, 40, 13)) {
-            gameScreen = "playerScreen";
+            gameScreen = playerDetailsScreen;
         }
         if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 + 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
                 "Comp",
@@ -820,6 +824,18 @@ public class SwingSubsystem {
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
             gameScreen = "startScreen";
         }
+    }
+
+    public void getPlayerDetails(Graphics g) {
+        panel.setBackground(Color.blue);
+        drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
+        drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2, frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+        /* if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 - 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
+                "Player",
+                Color.BLACK, Color.WHITE, 40, 13)) {
+            gameScreen = "playerScreen";
+        } */
+        
     }
 
     public void compMenu(Graphics g) {
