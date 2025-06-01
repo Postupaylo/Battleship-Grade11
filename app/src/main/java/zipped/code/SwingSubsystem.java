@@ -830,11 +830,11 @@ public class SwingSubsystem {
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
         drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2, frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
-        /* if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 - 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
-                "Player",
+        if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 300, 200, 125,
+                "Ok",
                 Color.BLACK, Color.WHITE, 40, 13)) {
             gameScreen = "playerScreen";
-        } */
+        }
         
     }
 
