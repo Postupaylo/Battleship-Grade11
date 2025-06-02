@@ -21,12 +21,13 @@ public class SwingSubsystem {
     int gridY;
     int keyIndex = 1;
     int pressedKey;
+    int score;
     boolean keyPressed;
     boolean keyReady;
     boolean mousePressed;
     boolean cellPressed;
     boolean switchBoat;
-    String gameScreen = "startScreen";
+    String gameScreen = "playerScreen";
     String shipMode = "carrier";
     String shipDirection = "up";
     Ships.Destroyer destroyer;
@@ -142,7 +143,7 @@ public class SwingSubsystem {
                 drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black,
                 true);
                 shipSelector(g, frame.getWidth() / 2 + 700 / 2 + 250 / 2 + 30, frame.getHeight() / 2, 250, 500);
-                scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50, frame.getHeight() / 2 - 700 / 2 + 100 / 2, 180, 100);
+                scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50, frame.getHeight() / 2 - 700 / 2 + 100 / 2, 180, 100, score);
                 break;
             case "compScreen":
                 compMenu(g);
@@ -843,7 +844,12 @@ public class SwingSubsystem {
         }
     }
 
-    public void scoreboard(Graphics g, int x, int y, int width, int height) {
+    public void scoreboard(Graphics g, int x, int y, int width, int height, int score) {
         drawRect(g, x, y, width, height, Color.BLACK, true);
+        drawCenteredText(g, "Score:", x, y, 20, Color.BLACK, "Arial");
+        drawCenteredText(g, String.valueOf(score), x, y + 35, 20, Color.BLACK, "Arial");
+        if(roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
+            gameScreen = "modeSelectScreen";
+        }
     }
 }
