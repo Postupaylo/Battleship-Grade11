@@ -143,12 +143,10 @@ public class SwingSubsystem {
                 getPlayer2Details(g);
                 break;
             case "playerScreen":
-                drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
-                        10, Color.black, Color.black,
-                        true);
-                shipSelector(g, frame.getWidth() - 250 / 2 - 50,
-                        frame.getHeight() / 2, 250, 500);
-                scoreboard(g, frame.getHeight());
+                drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black,
+                true);
+                shipSelector(g, frame.getWidth() / 2 + 700 / 2 + 250 / 2 + 30, frame.getHeight() / 2, 250, 500);
+                scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50, frame.getHeight() / 2 - 700 / 2 + 100 / 2, 180, 100);
                 break;
             case "compScreen":
                 compMenu(g);
@@ -652,8 +650,8 @@ public class SwingSubsystem {
         return gridY;
     }
 
-    public void drawCross(int x, int y){
-        
+    public void drawCross(int x, int y) {
+
     }
 
     /**
@@ -831,7 +829,7 @@ public class SwingSubsystem {
         }
     }
 
-    public void getPlayerDetails(Graphics g) {
+    public void getPlayerDetails(Graphics g) {     
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
         drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2, frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
@@ -854,7 +852,6 @@ public class SwingSubsystem {
                 Color.BLACK, Color.WHITE, 40, 13)) {
             gameScreen = "playerScreen";
         }
-        
     }
 
     public void compMenu(Graphics g) {
@@ -864,7 +861,7 @@ public class SwingSubsystem {
         }
     }
 
-    public void scoreboard(Graphics g, int height) {
-        drawRect(g, 100, 50, 75*2, 75, Color.black, true);
+    public void scoreboard(Graphics g, int x, int y, int width, int height) {
+        drawRect(g, x, y, width, height, Color.BLACK, true);
     }
 }
