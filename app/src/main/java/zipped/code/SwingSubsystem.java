@@ -41,6 +41,7 @@ public class SwingSubsystem {
     Ships.Battleship battleship2;
     Ships.Carrier carrier2;
     final String playerDetailsScreen = "playerDetailsScreen";
+    final String Player2DetailsScreen = "player2DetailsScreen";
 
     public SwingSubsystem() {
         destroyer = ships.new Destroyer();
@@ -138,6 +139,9 @@ public class SwingSubsystem {
                 break;
             case playerDetailsScreen:
                 getPlayerDetails(g);
+                break;
+            case Player2DetailsScreen:
+                getPlayer2Details(g);
                 break;
             case "playerScreen":
                 drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black,
@@ -830,6 +834,20 @@ public class SwingSubsystem {
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
         drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2, frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+        if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 150, 200, 125,
+                "Ok",
+                Color.BLACK, Color.WHITE, 40, 13)) {
+
+            gameScreen = Player2DetailsScreen;
+            getPlayer2Details(g);
+        }
+        
+    }
+
+    public void getPlayer2Details(Graphics g) {
+        panel.setBackground(Color.blue);
+        drawCenteredText(g, "Player 2 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
+        drawCenteredText(g, "Player 2 : Enter your name and a new password", frame.getWidth() / 2, frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
         if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 300, 200, 125,
                 "Ok",
                 Color.BLACK, Color.WHITE, 40, 13)) {
