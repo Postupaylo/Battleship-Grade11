@@ -26,7 +26,7 @@ public class SwingSubsystem {
     boolean mousePressed;
     boolean cellPressed;
     boolean switchBoat;
-    String gameScreen = "startScreen";
+    String gameScreen = "playerScreen";
     String shipMode = "carrier";
     String shipDirection = "up";
     Ships.Destroyer destroyer;
@@ -144,6 +144,7 @@ public class SwingSubsystem {
                         true);
                 shipSelector(g, frame.getWidth() - 250 / 2 - 50,
                         frame.getHeight() / 2, 250, 500);
+                scoreboard(g, frame.getHeight());
                 break;
             case "compScreen":
                 compMenu(g);
@@ -843,5 +844,9 @@ public class SwingSubsystem {
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
             gameScreen = "modeSelectScreen";
         }
+    }
+
+    public void scoreboard(Graphics g, int height) {
+        drawRect(g, 100, 50, 75*2, 75, Color.black, true);
     }
 }
