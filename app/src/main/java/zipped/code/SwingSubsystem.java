@@ -44,6 +44,15 @@ public class SwingSubsystem {
     final String playerDetailsScreen = "playerDetailsScreen";
     final String Player2DetailsScreen = "player2DetailsScreen";
 
+    //Player Screen fields
+    JTextField usernameField = new JTextField(15);
+    JPasswordField passwordField = new JPasswordField(15);
+    boolean playerFieldsAdded = false;
+
+    //Two Player objects
+    Player player1 = new Player();
+    Player player2 = new Player();
+
     public SwingSubsystem() {
         destroyer = ships.new Destroyer();
         submarine = ships.new Submarine();
@@ -861,24 +870,56 @@ public class SwingSubsystem {
     }
 
     public void getPlayerDetails(Graphics g) {
+        
+
+
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
         drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2,
                 frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+
+        // Add text fields only once
+        if (!playerFieldsAdded) {
+            usernameField = new JTextField(15);
+            passwordField = new JPasswordField(15);
+
+            // Set positions manually (absolute layout)
+            panel.setLayout(null);
+            usernameField.setBounds(frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30);
+            passwordField.setBounds(frame.getWidth() / 2 - 100, frame.getHeight() / 2 + 10, 200, 30);
+
+            panel.add(usernameField);
+            panel.add(passwordField);
+            playerFieldsAdded = true;
+            panel.repaint();
+        }
+
+
         if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 150, 200, 125,
                 "Ok",
                 Color.BLACK, Color.WHITE, 40, 13) && mouseReady) 
-            {
-                mouseReady = false;
-                gameScreen = Player2DetailsScreen;
-                getPlayer2Details(g);
-            }
+        {
+            mouseReady = false;
+
+            // You can get the values like this:
+            player1.name = usernameField.getText();
+            player1.password = new String(passwordField.getPassword());
+
+            // Remove fields when done
+            panel.remove(usernameField);
+            panel.remove(passwordField);
+            playerFieldsAdded = false;            
+            panel.repaint();
+
+            gameScreen = Player2DetailsScreen;
+            getPlayer2Details(g);
+        }
         if (!roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 150, 200, 125,
                 "Ok",
                 Color.BLACK, Color.WHITE, 40, 13))
-            {
-                mouseReady = true;
-            }
+        {
+            mouseReady = true;
+        }
 
     }
 
@@ -886,7 +927,9 @@ public class SwingSubsystem {
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 2 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
         drawCenteredText(g, "Player 2 : Enter your name and a new password", frame.getWidth() / 2,
-        frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+            frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+        drawCenteredText(g, "Hello " + player1.name, frame.getWidth() / 2,
+            frame.getHeight() * 3 / 5, 50, Color.BLACK, "Arial");
         if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 300, 200, 125,
                 "Ok",
                 Color.BLACK, Color.WHITE, 40, 13) && mouseReady) 
