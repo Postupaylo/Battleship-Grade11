@@ -905,6 +905,12 @@ public class SwingSubsystem {
             player1.name = usernameField.getText();
             player1.password = new String(passwordField.getPassword());
 
+            if(player1.ValidNameAndPassword() == false) {
+                
+                JOptionPane.showMessageDialog(frame, "Both name and password must be 1 to 50 characters. Please try again.");
+                return;
+            }
+
             // Remove fields when done
             panel.remove(usernameField);
             panel.remove(passwordField);
