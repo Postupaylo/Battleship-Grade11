@@ -878,6 +878,9 @@ public class SwingSubsystem {
         drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2,
                 frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
 
+        drawCenteredText(g, "Name:", frame.getWidth() / 2 - 180, frame.getHeight() / 2 + 10, 40, Color.BLACK, "Arial");
+        drawCenteredText(g, "Password:", frame.getWidth() / 2 - 220, frame.getHeight() / 2 + 60, 40, Color.BLACK, "Arial");
+
         // Add text fields only once
         if (!playerFieldsAdded) {
             usernameField = new JTextField(15);
