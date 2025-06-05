@@ -43,6 +43,7 @@ public class SwingSubsystem {
     Ships.Carrier carrier2;
     final String playerDetailsScreen = "playerDetailsScreen";
     final String Player2DetailsScreen = "player2DetailsScreen";
+    String player1ErrorMessage = "";
 
     //Player Screen fields
     JTextField usernameField = new JTextField(15);
@@ -909,8 +910,9 @@ public class SwingSubsystem {
             player1.password = new String(passwordField.getPassword());
 
             if(player1.ValidNameAndPassword() == false) {
-                
-                JOptionPane.showMessageDialog(frame, "Both name and password must be 1 to 50 characters. Please try again.");
+                // set the error message
+                player1ErrorMessage = "Both name and password must be 1 to 50 characters. Please try again.";
+                mouseReady = true;
                 return;
             }
 
@@ -919,6 +921,8 @@ public class SwingSubsystem {
             panel.remove(passwordField);
             playerFieldsAdded = false;            
             panel.repaint();
+
+            player1ErrorMessage = ""; // Clear error message
 
             gameScreen = Player2DetailsScreen;
             getPlayer2Details(g);
@@ -929,7 +933,11 @@ public class SwingSubsystem {
         {
             mouseReady = true;
         }
-
+        // Draw error message if present
+        if (!player1ErrorMessage.isEmpty()) 
+        {
+            drawCenteredText(g, player1ErrorMessage, frame.getWidth() / 2 -50, frame.getHeight() - 50, 30, Color.RED, "Arial");
+        }
     }
 
     public void getPlayer2Details(Graphics g) {
