@@ -51,10 +51,6 @@ public class SwingSubsystem {
     final String playerDetailsScreen = "playerDetailsScreen";
     final String Player2DetailsScreen = "player2DetailsScreen";
     String player1ErrorMessage = "";
-
-    //Player Screen fields
-    JTextField usernameField = new JTextField(15);
-    JPasswordField passwordField = new JPasswordField(15);
     boolean playerFieldsAdded = false;
 
     //Two Player objects
@@ -968,7 +964,9 @@ public class SwingSubsystem {
 
     public void getPlayerDetails(Graphics g) {
         
-
+        // Allows you to click in the text fields
+        rectButton(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, "", Color.white, Color.white, 10);
+        textField(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, cellPressed, Color.BLACK, Color.white, 10);
 
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
@@ -980,18 +978,14 @@ public class SwingSubsystem {
 
         // Add text fields only once
         if (!playerFieldsAdded) {
-            usernameField = new JTextField(15);
-            passwordField = new JPasswordField(15);
+            /* usernameField = new JTextField(15);
+            passwordField = new JPasswordField(15); */
 
-            // Set positions manually (absolute layout)
-            panel.setLayout(null);
-            usernameField.setBounds(frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30);
-            passwordField.setBounds(frame.getWidth() / 2 - 100, frame.getHeight() / 2 + 10, 200, 30);
+            // Allows you to click in the text fields
+            rectButton(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, "", Color.white, Color.white, 10);
+            textField(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, true, Color.BLACK, Color.white, 10);
 
-            panel.add(usernameField);
-            panel.add(passwordField);
-            playerFieldsAdded = true;
-            panel.repaint();
+
         }
 
 
@@ -1001,21 +995,12 @@ public class SwingSubsystem {
         {
             mouseReady = false;
 
-            // You can get the values like this:
-            player1.name = usernameField.getText();
-            player1.password = new String(passwordField.getPassword());
-
             if(player1.ValidNameAndPassword() == false) {
                 // set the error message
                 player1ErrorMessage = "Both name and password must be 1 to 50 characters. Please try again.";
                 mouseReady = true;
                 return;
-            }
-
-            // Remove fields when done
-            panel.remove(usernameField);
-            panel.remove(passwordField);
-            playerFieldsAdded = false;            
+            }          
             panel.repaint();
 
             player1ErrorMessage = ""; // Clear error message
