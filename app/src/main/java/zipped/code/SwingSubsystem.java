@@ -1,6 +1,9 @@
 package zipped.code;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -30,6 +33,7 @@ public class SwingSubsystem {
     int score;
     boolean keyPressed;
     boolean keyReady;
+    boolean musicReady = true;
     boolean mouseReady = true;
     boolean mousePressed;
     boolean cellPressed;
@@ -50,6 +54,9 @@ public class SwingSubsystem {
     Ships.Carrier carrier2;
     final String playerDetailsScreen = "playerDetailsScreen";
     final String Player2DetailsScreen = "player2DetailsScreen";
+    Clip menuMusicClip;
+    Clip gameMusicClip;
+
     String player1ErrorMessage = "";
     boolean playerFieldsAdded = false;
 
@@ -163,10 +170,10 @@ public class SwingSubsystem {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
     }
 
     public void draw(Graphics g) {
+        gameMusic(gameScreen);
         switch (gameScreen) {
             case "startScreen":
                 startMenu(g);
@@ -182,9 +189,10 @@ public class SwingSubsystem {
                 break;
             case "playerScreen":
                 drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black,
-                        true);
+                                true);
                 shipSelector(g, frame.getWidth() / 2 + 700 / 2 + 250 / 2 + 30, frame.getHeight() / 2, 250, 500);
                 scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50, frame.getHeight() / 2 - 700 / 2 + 100 / 2,
+                       
                         180, 100, score);
                 break;
             case "compScreen":
@@ -914,6 +922,7 @@ public class SwingSubsystem {
         if (mousePressed && mouseReady) 
         {
             mouseReady = false;
+            menuMusicClip.stop();
             gameScreen = "modeSelectScreen";
         }
         if (!mousePressed) 
@@ -954,6 +963,7 @@ public class SwingSubsystem {
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13) && mouseReady) 
         {
             mouseReady = false;
+            gameMusicClip.stop();
             gameScreen = "startScreen";
         }
         if (!roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13))
@@ -1068,6 +1078,39 @@ public class SwingSubsystem {
         if (!roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13))
         {
             mouseReady = true;
+        }
+    }
+
+    public void gameMusic(String gameScreen) {
+        switch (gameScreen) {
+            case "startScreen":
+                if (musicReady) {
+                    try {
+                        AudioInputStream menuSong = AudioSystem.getAudioInputStream(
+                                new File("T:\\BAN-ICS3U1-1\\COMMON\\thom4240\\Battleship-Grade11\\menuSong.wav"));
+                        menuMusicClip = AudioSystem.getClip();
+                        menuMusicClip.open(menuSong);
+                    } catch (Exception e) {
+                        System.out.println(e + ". Not working");
+                    }
+                    menuMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    musicReady = false;
+                }
+                break;
+            default:
+                if (musicReady) {
+                    try {
+                        AudioInputStream gameSong = AudioSystem.getAudioInputStream(
+                                new File("T:\\BAN-ICS3U1-1\\COMMON\\thom4240\\Battleship-Grade11\\gameSong.wav"));
+                        gameMusicClip = AudioSystem.getClip();
+                        gameMusicClip.open(gameSong);
+                    } catch (Exception e) {
+                        System.out.println(e + ". Not working");
+                    }
+                    gameMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    musicReady = false;
+                }
+                break;
         }
     }
 }
