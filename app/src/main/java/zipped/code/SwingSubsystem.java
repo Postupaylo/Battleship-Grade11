@@ -8,6 +8,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SwingSubsystem {
     Ships ships = new Ships();
@@ -21,24 +24,24 @@ public class SwingSubsystem {
     int gridY;
     int keyIndex = 1;
     int pressedKey;
+    int overAmount;
+    List<Integer> attemptedX = new ArrayList<>();
+    List<Integer> attemptedY = new ArrayList<>();
     boolean keyPressed;
     boolean keyReady;
+    boolean mouseReady = true;
     boolean mousePressed;
     boolean cellPressed;
     boolean switchBoat;
     String gameScreen = "startScreen";
     String shipMode = "carrier";
     String shipDirection = "up";
+    String textInput = "";
     Ships.Destroyer destroyer;
     Ships.Submarine submarine;
     Ships.Cruiser cruiser;
     Ships.Battleship battleship;
     Ships.Carrier carrier;
-    Ships.Destroyer destroyer2;
-    Ships.Submarine submarine2;
-    Ships.Cruiser cruiser2;
-    Ships.Battleship battleship2;
-    Ships.Carrier carrier2;
 
     public SwingSubsystem() {
         destroyer = ships.new Destroyer();
@@ -91,6 +94,7 @@ public class SwingSubsystem {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                mouseReady = true;
                 mousePressed = false; // Mouse is released
                 cellPressed = false;
                 panel.repaint();
@@ -100,6 +104,27 @@ public class SwingSubsystem {
         panel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_BACK_SPACE:
+                        textInput = textInput.substring(0, textInput.length() - 1);
+                        break;
+                    case (KeyEvent.VK_SHIFT):
+                        textInput = textInput.substring(0, textInput.length());
+                        break;
+                    case (KeyEvent.VK_ALT):
+                        textInput = textInput.substring(0, textInput.length());
+                        break;
+                    case (KeyEvent.VK_CONTROL):
+                        textInput = textInput.substring(0, textInput.length());
+                        break;
+                    case (KeyEvent.VK_ESCAPE):
+                        textInput = textInput.substring(0, textInput.length());
+                        break;
+                    default:
+                        textInput += String.valueOf(e.getKeyChar());
+                        break;
+                }
+
                 if (e.getKeyCode() == KeyEvent.VK_R && keyReady) {
                     keyReady = false;
                     keyIndex++;
@@ -115,7 +140,7 @@ public class SwingSubsystem {
 
         panel.setFocusable(true);
         panel.requestFocusInWindow();
-        panel.setBackground(Color.blue);
+        panel.setBackground(Color.red);
 
         frame.setIconImage(grug);
         frame.add(panel);
@@ -127,24 +152,31 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
-        switch (gameScreen) {
-            case "startScreen":
-                startMenu(g);
-                break;
-            case "modeSelectScreen":
-                modeSelectMenu(g);
-                break;
-            case "playerScreen":
-                drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
-                        10, Color.black, Color.black,
-                        true);
-                shipSelector(g, frame.getWidth() - 250 / 2 - 50,
-                        frame.getHeight() / 2, 250, 500);
-                break;
-            case "compScreen":
-                compMenu(g);
-                break;
-        }
+        // switch (gameScreen) {
+        // case "startScreen":
+        // startMenu(g);
+        // break;
+        // case "modeSelectScreen":
+        // modeSelectMenu(g);
+        // break;
+        // case "playerScreen":
+        // drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
+        // 10, Color.black, Color.black,
+        // true);
+        // shipSelector(g, frame.getWidth() - 250 / 2 - 50,
+        // frame.getHeight() / 2, 250, 500);
+        // break;
+        // case "compScreen":
+        // compMenu(g);
+        // break;
+        // }
+        drawEnemyGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10,
+                10,
+                10, Color.black, Color.black,
+                true);
+        // print(g, textInput);
+        // textField(g, frame.getWidth() / 2, frame.getHeight() / 2, 300, 50, true,
+        // Color.BLACK, Color.white, 20);
         panel.repaint();
     }
 
@@ -230,6 +262,7 @@ public class SwingSubsystem {
                                 height / yCell);
                     }
                 }
+
                 if (mouseX > (x - (width / 2) - xCell + (xIndex * (width / xCell)))
                         && mouseX < (x - (width / 2) - xCell + (xIndex * (width / xCell))) + width / xCell) {
                     if (mouseY > (y - (height / 2) - yCell + (yIndex * (height / yCell)))
@@ -604,7 +637,7 @@ public class SwingSubsystem {
 
     // endregion
     // region Enemy Grid
-    public void drawSecondGrid(Graphics g, int x, int y, int width, int height, int xCell, int yCell, int lineThickness,
+    public void drawEnemyGrid(Graphics g, int x, int y, int width, int height, int xCell, int yCell, int lineThickness,
             Color lineColor, Color cellColor, boolean doHoverEffect) {
         for (int xIndex = 0; xIndex < xCell; xIndex++) {
             for (int yIndex = 0; yIndex < yCell; yIndex++) {
@@ -612,6 +645,26 @@ public class SwingSubsystem {
                 ((Graphics2D) g).setStroke(new BasicStroke(5));
                 g.drawRect((x - (width / 2) - xCell + (xIndex * (width / xCell))),
                         (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell, height / yCell);
+
+                for (int enemyShotCount = 0; enemyShotCount < attemptedX.size(); enemyShotCount++) {
+                    if (xIndex == attemptedX.get(enemyShotCount)) {
+                        if (yIndex == attemptedY.get(enemyShotCount)) {
+                            g.setColor(Color.black);
+                            g.fillRect((x - (width / 2) - xCell + (xIndex * (width / xCell))),
+                                    (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell,
+                                    height / yCell);
+                            int textSize = 50;
+                            drawCenteredText(g, "X",
+                                    (x - (width / 2) - xCell + (xIndex * (width / xCell))) + (width / xCell) / 2,
+                                    (y - (height / 2) - yCell + (yIndex * (height / yCell))) + (height / yCell)
+                                            + textSize / 4,
+                                    textSize, Color.white, "Arial");
+
+                        }
+
+                    }
+                }
+
                 if (mouseX > (x - (width / 2) - xCell + (xIndex * (width / xCell)))
                         && mouseX < (x - (width / 2) - xCell + (xIndex * (width / xCell))) + width / xCell) {
                     if (mouseY > (y - (height / 2) - yCell + (yIndex * (height / yCell)))
@@ -622,12 +675,15 @@ public class SwingSubsystem {
                                 (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell,
                                 height / yCell,
                                 "Click me!", cellColor, lineColor, 7)) {
-
+                            mouseReady = false;
+                            attemptedX.add(xIndex);
+                            attemptedY.add(yIndex);
                         }
                     }
                 }
             }
         }
+        System.out.println("X: " + attemptedX + " Y: " + attemptedY);
     }
     // endregion
 
@@ -643,8 +699,42 @@ public class SwingSubsystem {
         return gridY;
     }
 
-    public void drawCross(int x, int y){
-        
+    public String textField(Graphics g, int x, int y, int width, int height, boolean isFocused,
+            Color backgroundColor, Color textColor, int textSize) {
+        int margin = width / 20;
+        drawFillRect(g, x, y, width, height, backgroundColor, isFocused);
+
+        if (isFocused) {
+            g.setColor(textColor);
+            Font font = new Font("Arial", Font.BOLD, textSize);
+            g.setFont(font);
+            FontMetrics metrics = g.getFontMetrics(font);
+
+            // Determine the visible string
+            String visibleText = textInput;
+            int totalWidth = metrics.stringWidth(visibleText);
+            int maxTextWidth = width - 2 * margin;
+
+            if (totalWidth > maxTextWidth) {
+                // Start trimming from the left until it fits
+                int start = 0;
+                while (start < textInput.length()) {
+                    String substring = textInput.substring(start);
+                    if (metrics.stringWidth(substring) <= maxTextWidth) {
+                        visibleText = substring;
+                        break;
+                    }
+                    start++;
+                }
+            }
+
+            // Draw the visible part of the text
+            int textX = x - width / 2 + margin;
+            int textY = y + (metrics.getHeight() / 4);
+            g.drawString(visibleText, textX, textY);
+        }
+
+        return textInput;
     }
 
     /**
@@ -672,7 +762,7 @@ public class SwingSubsystem {
         int textX = x + (width - textWidth) / 2;
         int textY = y + (height - textHeight) / 2 + metrics.getAscent();
         g.drawString(label, textX, textY);
-        return withinBoundaries(mouseX, mouseY, x, y, width, height) && mousePressed;
+        return withinBoundaries(mouseX, mouseY, x, y, width, height) && mousePressed && mouseReady;
     }
 
     public boolean roundedRectButton(Graphics g, int x, int y, int width, int height, String label, Color buttonColor,
