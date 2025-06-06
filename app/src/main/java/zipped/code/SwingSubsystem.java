@@ -56,6 +56,7 @@ public class SwingSubsystem {
     final String Player2DetailsScreen = "player2DetailsScreen";
     Clip menuMusicClip;
     Clip gameMusicClip;
+
     String player1ErrorMessage = "";
 
     //Player Screen fields
@@ -925,6 +926,7 @@ public class SwingSubsystem {
         if (mousePressed && mouseReady) 
         {
             mouseReady = false;
+            menuMusicClip.stop();
             gameScreen = "modeSelectScreen";
         }
         if (!mousePressed) 
@@ -965,6 +967,7 @@ public class SwingSubsystem {
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13) && mouseReady) 
         {
             mouseReady = false;
+            gameMusicClip.stop();
             gameScreen = "startScreen";
         }
         if (!roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13))
