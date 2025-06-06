@@ -1,6 +1,9 @@
 package zipped.code;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -24,10 +27,11 @@ public class SwingSubsystem {
     int score;
     boolean keyPressed;
     boolean keyReady;
+    boolean musicReady = true;
     boolean mousePressed;
     boolean cellPressed;
     boolean switchBoat;
-    String gameScreen = "playerScreen";
+    String gameScreen = "startScreen";
     String shipMode = "carrier";
     String shipDirection = "up";
     Ships.Destroyer destroyer;
@@ -42,6 +46,8 @@ public class SwingSubsystem {
     Ships.Carrier carrier2;
     final String playerDetailsScreen = "playerDetailsScreen";
     final String Player2DetailsScreen = "player2DetailsScreen";
+    Clip menuMusicClip;
+    Clip gameMusicClip;
 
     public SwingSubsystem() {
         destroyer = ships.new Destroyer();
@@ -126,10 +132,10 @@ public class SwingSubsystem {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
     }
 
     public void draw(Graphics g) {
+        gameMusic(gameScreen);
         switch (gameScreen) {
             case "startScreen":
                 startMenu(g);
@@ -145,9 +151,10 @@ public class SwingSubsystem {
                 break;
             case "playerScreen":
                 drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black,
-                true);
+                        true);
                 shipSelector(g, frame.getWidth() / 2 + 700 / 2 + 250 / 2 + 30, frame.getHeight() / 2, 250, 500);
-                scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50, frame.getHeight() / 2 - 700 / 2 + 100 / 2, 180, 100, score);
+                scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50, frame.getHeight() / 2 - 700 / 2 + 100 / 2,
+                        180, 100, score);
                 break;
             case "compScreen":
                 compMenu(g);
@@ -809,6 +816,8 @@ public class SwingSubsystem {
         if (roundedRectButton(g, frame.getWidth() / 2, frame.getHeight() / 2, 70, 30, "Start!", Color.BLACK,
                 Color.YELLOW, 20, 10)) {
             gameScreen = "modeSelectScreen";
+            menuMusicClip.stop();
+            musicReady = true;
         }
     }
 
@@ -827,13 +836,16 @@ public class SwingSubsystem {
         }
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
             gameScreen = "startScreen";
+            gameMusicClip.stop();
+            musicReady = true;
         }
     }
 
-    public void getPlayerDetails(Graphics g) {     
+    public void getPlayerDetails(Graphics g) {
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
-        drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2, frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+        drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2,
+                frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
         if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 150, 200, 125,
                 "Ok",
                 Color.BLACK, Color.WHITE, 40, 13)) {
@@ -841,13 +853,13 @@ public class SwingSubsystem {
             gameScreen = Player2DetailsScreen;
             getPlayer2Details(g);
         }
-        
     }
 
     public void getPlayer2Details(Graphics g) {
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 2 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
-        drawCenteredText(g, "Player 2 : Enter your name and a new password", frame.getWidth() / 2, frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+        drawCenteredText(g, "Player 2 : Enter your name and a new password", frame.getWidth() / 2,
+                frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
         if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 300, 200, 125,
                 "Ok",
                 Color.BLACK, Color.WHITE, 40, 13)) {
@@ -866,8 +878,41 @@ public class SwingSubsystem {
         drawRect(g, x, y, width, height, Color.BLACK, true);
         drawCenteredText(g, "Score:", x, y, 20, Color.BLACK, "Arial");
         drawCenteredText(g, String.valueOf(score), x, y + 35, 20, Color.BLACK, "Arial");
-        if(roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
+        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
             gameScreen = "modeSelectScreen";
+        }
+    }
+
+    public void gameMusic(String gameScreen) {
+        switch (gameScreen) {
+            case "startScreen":
+                if (musicReady) {
+                    try {
+                        AudioInputStream menuSong = AudioSystem.getAudioInputStream(
+                                new File("T:\\BAN-ICS3U1-1\\COMMON\\thom4240\\Battleship-Grade11\\menuSong.wav"));
+                        menuMusicClip = AudioSystem.getClip();
+                        menuMusicClip.open(menuSong);
+                    } catch (Exception e) {
+                        System.out.println(e + ". Not working");
+                    }
+                    menuMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    musicReady = false;
+                }
+                break;
+            default:
+                if (musicReady) {
+                    try {
+                        AudioInputStream gameSong = AudioSystem.getAudioInputStream(
+                                new File("T:\\BAN-ICS3U1-1\\COMMON\\thom4240\\Battleship-Grade11\\gameSong.wav"));
+                        gameMusicClip = AudioSystem.getClip();
+                        gameMusicClip.open(gameSong);
+                    } catch (Exception e) {
+                        System.out.println(e + ". Not working");
+                    }
+                    gameMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    musicReady = false;
+                }
+                break;
         }
     }
 }
