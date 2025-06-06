@@ -32,7 +32,6 @@ public class SwingSubsystem {
     boolean keyReady;
     boolean mouseReady = true;
     boolean mousePressed;
-    boolean mouseReady;
     boolean cellPressed;
     boolean switchBoat;
     String gameScreen = "startScreen";
@@ -195,6 +194,10 @@ public class SwingSubsystem {
             case "compScreen":
                 compMenu(g);
                 break;
+            case "enemyGridScreen":
+                 drawEnemyGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black,
+                        true);
+            break;
         }
         panel.repaint();
     }
@@ -233,6 +236,10 @@ public class SwingSubsystem {
                 ((Graphics2D) g).setStroke(new BasicStroke(5));
                 g.drawRect((x - (width / 2) - xCell + (xIndex * (width / xCell))),
                         (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell, height / yCell);
+
+                if(roundedRectButton(g, frame.getWidth() - 300, 500, 200, 100, "Enemy Grid", Color.black, Color.white, 30, 20)){
+                    gameScreen = "enemyGridScreen";
+                }
                 if (destroyer.doRender) {
                     for (int destroyerIndex = 0; destroyerIndex < destroyer.shipLength; destroyerIndex++) {
                         g.setColor(destroyer.shipColor);
@@ -683,6 +690,7 @@ public class SwingSubsystem {
 
                     }
                 }
+
 
                 if (mouseX > (x - (width / 2) - xCell + (xIndex * (width / xCell)))
                         && mouseX < (x - (width / 2) - xCell + (xIndex * (width / xCell))) + width / xCell) {
