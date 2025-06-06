@@ -27,10 +27,12 @@ public class SwingSubsystem {
     int overAmount;
     List<Integer> attemptedX = new ArrayList<>();
     List<Integer> attemptedY = new ArrayList<>();
+    int score;
     boolean keyPressed;
     boolean keyReady;
     boolean mouseReady = true;
     boolean mousePressed;
+    boolean mouseReady;
     boolean cellPressed;
     boolean switchBoat;
     String gameScreen = "startScreen";
@@ -42,6 +44,23 @@ public class SwingSubsystem {
     Ships.Cruiser cruiser;
     Ships.Battleship battleship;
     Ships.Carrier carrier;
+    Ships.Destroyer destroyer2;
+    Ships.Submarine submarine2;
+    Ships.Cruiser cruiser2;
+    Ships.Battleship battleship2;
+    Ships.Carrier carrier2;
+    final String playerDetailsScreen = "playerDetailsScreen";
+    final String Player2DetailsScreen = "player2DetailsScreen";
+    String player1ErrorMessage = "";
+
+    //Player Screen fields
+    JTextField usernameField = new JTextField(15);
+    JPasswordField passwordField = new JPasswordField(15);
+    boolean playerFieldsAdded = false;
+
+    //Two Player objects
+    Player player1 = new Player();
+    Player player2 = new Player();
 
     public SwingSubsystem() {
         destroyer = ships.new Destroyer();
@@ -55,10 +74,11 @@ public class SwingSubsystem {
         } catch (Exception e) {
             System.out.println("NO IMAGE FOUND!");
         }
-
+        //how to get a textfield working for input in visual studio code for java
         frame = new JFrame("grug simulator");
         frame.setSize(1000, 1000);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        JTextField textField = new JTextField(15);
         panel = new JPanel() {
             @Override
             public void paintComponent(Graphics g) {
@@ -152,31 +172,30 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
-        // switch (gameScreen) {
-        // case "startScreen":
-        // startMenu(g);
-        // break;
-        // case "modeSelectScreen":
-        // modeSelectMenu(g);
-        // break;
-        // case "playerScreen":
-        // drawGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10, 10,
-        // 10, Color.black, Color.black,
-        // true);
-        // shipSelector(g, frame.getWidth() - 250 / 2 - 50,
-        // frame.getHeight() / 2, 250, 500);
-        // break;
-        // case "compScreen":
-        // compMenu(g);
-        // break;
-        // }
-        drawEnemyGrid(g, frame.getWidth() - 700, frame.getHeight() / 2, 700, 700, 10,
-                10,
-                10, Color.black, Color.black,
-                true);
-        // print(g, textInput);
-        // textField(g, frame.getWidth() / 2, frame.getHeight() / 2, 300, 50, true,
-        // Color.BLACK, Color.white, 20);
+        switch (gameScreen) {
+            case "startScreen":
+                startMenu(g);
+                break;
+            case "modeSelectScreen":
+                modeSelectMenu(g);
+                break;
+            case playerDetailsScreen:
+                getPlayerDetails(g);
+                break;
+            case Player2DetailsScreen:
+                getPlayer2Details(g);
+                break;
+            case "playerScreen":
+                drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10, 10, Color.black, Color.black,
+                        true);
+                shipSelector(g, frame.getWidth() / 2 + 700 / 2 + 250 / 2 + 30, frame.getHeight() / 2, 250, 500);
+                scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50, frame.getHeight() / 2 - 700 / 2 + 100 / 2,
+                        180, 100, score);
+                break;
+            case "compScreen":
+                compMenu(g);
+                break;
+        }
         panel.repaint();
     }
 
@@ -888,9 +907,14 @@ public class SwingSubsystem {
     public void startMenu(Graphics g) {
         panel.setBackground(Color.ORANGE);
         drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
-        if (roundedRectButton(g, frame.getWidth() / 2, frame.getHeight() / 2, 70, 30, "Start!", Color.BLACK,
-                Color.YELLOW, 20, 10)) {
+        if (mousePressed && mouseReady) 
+        {
+            mouseReady = false;
             gameScreen = "modeSelectScreen";
+        }
+        if (!mousePressed) 
+        {
+            mouseReady = true;
         }
     }
 
@@ -899,23 +923,158 @@ public class SwingSubsystem {
         drawCenteredText(g, "Select Game Mode", frame.getWidth() / 2, frame.getHeight() / 3, 100, Color.BLACK, "Arial");
         if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 - 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
                 "Player",
-                Color.BLACK, Color.WHITE, 40, 13)) {
-            gameScreen = "playerScreen";
-        }
+                Color.BLACK, Color.WHITE, 40, 13) && mouseReady) 
+            {
+                mouseReady = false;
+                gameScreen = playerDetailsScreen;
+            }
+        if (!roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 - 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
+                "Player",
+                Color.BLACK, Color.WHITE, 40, 13))
+            {
+                mouseReady = true;
+            }
         if (roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 + 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
                 "Comp",
-                Color.BLACK, Color.WHITE, 40, 13)) {
-            gameScreen = "compScreen";
-        }
-        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
+                Color.BLACK, Color.WHITE, 40, 13) && mouseReady) 
+            {
+                mouseReady = false;
+                gameScreen = "compScreen";
+            }
+        if (!roundedRectButton(g, frame.getWidth() / 2 - 200 / 2 + 200, frame.getHeight() / 2 - 125 / 2 + 75, 200, 125,
+                "Comp",
+                Color.BLACK, Color.WHITE, 40, 13)) 
+            {
+                mouseReady = true;
+            }
+        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13) && mouseReady) 
+        {
+            mouseReady = false;
             gameScreen = "startScreen";
         }
+        if (!roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13))
+        {
+            mouseReady = true;
+        }
+    }
+
+    public void getPlayerDetails(Graphics g) {
+        
+
+
+        panel.setBackground(Color.blue);
+        drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
+        drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2,
+                frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+
+        drawCenteredText(g, "Name:", frame.getWidth() / 2 - 180, frame.getHeight() / 2 + 10, 40, Color.BLACK, "Arial");
+        drawCenteredText(g, "Password:", frame.getWidth() / 2 - 220, frame.getHeight() / 2 + 60, 40, Color.BLACK, "Arial");
+
+        // Add text fields only once
+        if (!playerFieldsAdded) {
+            usernameField = new JTextField(15);
+            passwordField = new JPasswordField(15);
+
+            // Set positions manually (absolute layout)
+            panel.setLayout(null);
+            usernameField.setBounds(frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30);
+            passwordField.setBounds(frame.getWidth() / 2 - 100, frame.getHeight() / 2 + 10, 200, 30);
+
+            panel.add(usernameField);
+            panel.add(passwordField);
+            playerFieldsAdded = true;
+            panel.repaint();
+        }
+
+
+        if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 150, 200, 125,
+                "Ok",
+                Color.BLACK, Color.WHITE, 40, 13) && mouseReady) 
+        {
+            mouseReady = false;
+
+            // You can get the values like this:
+            player1.name = usernameField.getText();
+            player1.password = new String(passwordField.getPassword());
+
+            if(player1.ValidNameAndPassword() == false) {
+                // set the error message
+                player1ErrorMessage = "Both name and password must be 1 to 50 characters. Please try again.";
+                mouseReady = true;
+                return;
+            }
+
+            // Remove fields when done
+            panel.remove(usernameField);
+            panel.remove(passwordField);
+            playerFieldsAdded = false;            
+            panel.repaint();
+
+            player1ErrorMessage = ""; // Clear error message
+
+            gameScreen = Player2DetailsScreen;
+            getPlayer2Details(g);
+        }
+        if (!roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 150, 200, 125,
+                "Ok",
+                Color.BLACK, Color.WHITE, 40, 13))
+        {
+            mouseReady = true;
+        }
+        // Draw error message if present
+        if (!player1ErrorMessage.isEmpty()) 
+        {
+            drawCenteredText(g, player1ErrorMessage, frame.getWidth() / 2 -50, frame.getHeight() - 50, 30, Color.RED, "Arial");
+        }
+    }
+
+    public void getPlayer2Details(Graphics g) {
+        panel.setBackground(Color.blue);
+        drawCenteredText(g, "Player 2 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
+        drawCenteredText(g, "Player 2 : Enter your name and a new password", frame.getWidth() / 2,
+            frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+        drawCenteredText(g, "Hello " + player1.name, frame.getWidth() / 2,
+            frame.getHeight() * 3 / 5, 50, Color.BLACK, "Arial");
+        if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 300, 200, 125,
+                "Ok",
+                Color.BLACK, Color.WHITE, 40, 13) && mouseReady) 
+            {
+                mouseReady = false;
+                gameScreen = "playerScreen";
+            }
+        if (!roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 300, 200, 125,
+                "Ok",
+                Color.BLACK, Color.WHITE, 40, 13))
+            {
+                mouseReady = true;
+            }
     }
 
     public void compMenu(Graphics g) {
         panel.setBackground(Color.RED);
-        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
+        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13) && mouseReady) 
+        {
+            mouseReady = false;
             gameScreen = "modeSelectScreen";
+        }
+        if (!roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) 
+        {
+            mouseReady = true;    
+        }
+    }
+
+    public void scoreboard(Graphics g, int x, int y, int width, int height, int score) {
+        drawRect(g, x, y, width, height, Color.BLACK, true);
+        drawCenteredText(g, "Score:", x, y, 20, Color.BLACK, "Arial");
+        drawCenteredText(g, String.valueOf(score), x, y + 35, 20, Color.BLACK, "Arial");
+        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13) && mouseReady) 
+        {
+            mouseReady = false;
+            gameScreen = "modeSelectScreen";
+        }
+        if (!roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13))
+        {
+            mouseReady = true;
         }
     }
 }
