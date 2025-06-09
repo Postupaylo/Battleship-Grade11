@@ -49,6 +49,13 @@ public class SwingSubsystem {
     Clip menuMusicClip;
     Clip gameMusicClip;
 
+    String player1ErrorMessage = "";
+    boolean playerFieldsAdded = false;
+
+    //Two Player objects
+    Player player1 = new Player();
+    Player player2 = new Player();
+
     public SwingSubsystem() {
         destroyer = ships.new Destroyer();
         submarine = ships.new Submarine();
@@ -850,13 +857,47 @@ public class SwingSubsystem {
     }
 
     public void getPlayerDetails(Graphics g) {
+        
+        // Allows you to click in the text fields
+        rectButton(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, "", Color.white, Color.white, 10);
+        textField(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, cellPressed, Color.BLACK, Color.white, 10);
+
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
         drawCenteredText(g, "Player 1 : Enter your name and a new password", frame.getWidth() / 2,
                 frame.getHeight() * 2 / 5, 50, Color.BLACK, "Arial");
+
+        drawCenteredText(g, "Name:", frame.getWidth() / 2 - 180, frame.getHeight() / 2 + 10, 40, Color.BLACK, "Arial");
+        drawCenteredText(g, "Password:", frame.getWidth() / 2 - 220, frame.getHeight() / 2 + 60, 40, Color.BLACK, "Arial");
+
+        // Add text fields only once
+        if (!playerFieldsAdded) {
+            /* usernameField = new JTextField(15);
+            passwordField = new JPasswordField(15); */
+
+            // Allows you to click in the text fields
+            rectButton(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, "", Color.white, Color.white, 10);
+            textField(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, true, Color.BLACK, Color.white, 10);
+
+
+        }
+
+
         if (roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 150, 200, 125,
                 "Ok",
-                Color.BLACK, Color.WHITE, 40, 13)) {
+                Color.BLACK, Color.WHITE, 40, 13) && mouseReady) 
+        {
+            mouseReady = false;
+
+            if(player1.ValidNameAndPassword() == false) {
+                // set the error message
+                player1ErrorMessage = "Both name and password must be 1 to 50 characters. Please try again.";
+                mouseReady = true;
+                return;
+            }          
+            panel.repaint();
+
+            player1ErrorMessage = ""; // Clear error message
 
             gameScreen = Player2DetailsScreen;
             getPlayer2Details(g);
