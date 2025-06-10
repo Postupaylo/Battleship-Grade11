@@ -5,6 +5,9 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+
+import org.checkerframework.checker.units.qual.g;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -80,7 +83,7 @@ public class SwingSubsystem {
         frame = new JFrame("grug simulator");
         frame.setSize(1000, 1000);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        JTextField textField = new JTextField(15);
+        
         panel = new JPanel() {
             @Override
             public void paintComponent(Graphics g) {
@@ -173,7 +176,7 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
-        gameMusic(gameScreen);
+        //gameMusic(gameScreen);
         switch (gameScreen) {
             case "startScreen":
                 startMenu(g);
@@ -922,7 +925,6 @@ public class SwingSubsystem {
         if (mousePressed && mouseReady) 
         {
             mouseReady = false;
-            menuMusicClip.stop();
             gameScreen = "modeSelectScreen";
         }
         if (!mousePressed) 
@@ -963,7 +965,6 @@ public class SwingSubsystem {
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13) && mouseReady) 
         {
             mouseReady = false;
-            gameMusicClip.stop();
             gameScreen = "startScreen";
         }
         if (!roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13))
@@ -975,8 +976,8 @@ public class SwingSubsystem {
     public void getPlayerDetails(Graphics g) {
         
         // Allows you to click in the text fields
-        rectButton(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, "", Color.white, Color.white, 10);
-        textField(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, cellPressed, Color.BLACK, Color.white, 10);
+        //rectButton(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, "", Color.white, Color.white, 10);
+        textField(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 80, 200, 30, true, Color.BLACK, Color.white, 10);
 
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
@@ -988,12 +989,12 @@ public class SwingSubsystem {
 
         // Add text fields only once
         if (!playerFieldsAdded) {
-            /* usernameField = new JTextField(15);
-            passwordField = new JPasswordField(15); */
+             //usernameField = new JTextField(15);
+            //passwordField = new JPasswordField(15); */
 
             // Allows you to click in the text fields
-            rectButton(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, "", Color.white, Color.white, 10);
-            textField(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, true, Color.BLACK, Color.white, 10);
+            //rectButton(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, "", Color.white, Color.white, 10);
+            textField(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 25, 200, 30, true, Color.BLACK, Color.white, 10);
 
 
         }
@@ -1097,20 +1098,44 @@ public class SwingSubsystem {
                     musicReady = false;
                 }
                 break;
-            default:
-                if (musicReady) {
-                    try {
-                        AudioInputStream gameSong = AudioSystem.getAudioInputStream(
-                                new File("T:\\BAN-ICS3U1-1\\COMMON\\thom4240\\Battleship-Grade11\\gameSong.wav"));
-                        gameMusicClip = AudioSystem.getClip();
-                        gameMusicClip.open(gameSong);
-                    } catch (Exception e) {
-                        System.out.println(e + ". Not working");
-                    }
-                    gameMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
-                    musicReady = false;
-                }
-                break;
+            // default:
+            //     if (musicReady) {
+            //         try {
+            //             AudioInputStream gameSong = AudioSystem.getAudioInputStream(
+            //                     new File("T:\\BAN-ICS3U1-1\\COMMON\\thom4240\\Battleship-Grade11\\gameSong.wav"));
+            //             gameMusicClip = AudioSystem.getClip();
+            //             gameMusicClip.open(gameSong);
+            //         } catch (Exception e) {
+            //             System.out.println(e + ". Not working");
+            //         }
+            //         gameMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+            //         musicReady = false;
+            //     }
+            //     break;
         }
     }
+
+    
+
+    public void settingsMenu(Graphics g) {
+        if (roundedRectButton(g, frame.getWidth() - 50, frame.getHeight() - 50, 50, 50,
+                null, Color.GRAY, Color.WHITE, 40, 13) && mouseReady)
+            {
+                mouseReady = false;
+                drawFillRect(g, frame.getWidth() - 150, frame.getHeight() - 50, 100, 50, Color.WHITE, false);
+                if (roundedRectButton(g, frame.getWidth() - 117, frame.getHeight() - 30, 33, 20, "Change color", Color.BLACK, Color.WHITE, 10, 10))
+                {
+                    // Change color logic here
+                    // For example, you can change the background color of the panel
+                    panel.setBackground(Color.GREEN); // Change to your desired color
+                }
+            }
+        if (!roundedRectButton(g, frame.getWidth() - 300, frame.getHeight() - 150, 200, 125,
+                "Ok",
+                Color.BLACK, Color.WHITE, 40, 13))
+            {
+                mouseReady = true;
+            }
+    }
+
 }
