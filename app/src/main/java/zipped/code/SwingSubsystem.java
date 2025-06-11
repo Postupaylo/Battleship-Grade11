@@ -1,6 +1,9 @@
 package zipped.code;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -28,6 +31,7 @@ public class SwingSubsystem {
     int score;
     boolean keyPressed;
     boolean keyReady;
+    boolean musicReady = true;
     boolean mouseReady = true;
     boolean mousePressed;
     boolean cellPressed;
@@ -48,7 +52,8 @@ public class SwingSubsystem {
     Ships.Carrier carrier2;
     final String playerDetailsScreen = "playerDetailsScreen";
     final String Player2DetailsScreen = "player2DetailsScreen";
-    String player1ErrorMessage = "";
+    Clip menuMusicClip;
+    Clip gameMusicClip;
     PlayerData playerData1;
     PlayerData playerData2;
 
@@ -175,10 +180,10 @@ public class SwingSubsystem {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
     }
 
     public void draw(Graphics g) {
+        gameMusic(gameScreen);
         switch (gameScreen) {
             case "startScreen":
                 startMenu(g);
@@ -199,6 +204,7 @@ public class SwingSubsystem {
                 playerData1.shipSelector(g, frame.getWidth() / 2 + 700 / 2 + 250 / 2 + 30, frame.getHeight() / 2, 250,
                         500);
                 scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50, frame.getHeight() / 2 - 700 / 2 + 100 / 2,
+                       
                         180, 100, score);
                 break;
             case "compScreen":
@@ -982,6 +988,7 @@ public class SwingSubsystem {
         drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
         if (mousePressed && mouseReady) {
             mouseReady = false;
+            menuMusicClip.stop();
             gameScreen = "modeSelectScreen";
         }
         if (!mousePressed) {
@@ -1016,6 +1023,7 @@ public class SwingSubsystem {
         }
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13) && mouseReady) {
             mouseReady = false;
+            gameMusicClip.stop();
             gameScreen = "startScreen";
         }
         if (!roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
@@ -1024,6 +1032,10 @@ public class SwingSubsystem {
     }
 
     public void getPlayerDetails(Graphics g) {
+        
+        // Allows you to click in the text fields
+        rectButton(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, "", Color.white, Color.white, 10);
+        textField(g, frame.getWidth() / 2 - 100, frame.getHeight() / 2 - 40, 200, 30, cellPressed, Color.BLACK, Color.white, 10);
 
         panel.setBackground(Color.blue);
         drawCenteredText(g, "Player 1 Details", frame.getWidth() / 2, frame.getHeight() / 5, 100, Color.BLACK, "Arial");
@@ -1036,8 +1048,8 @@ public class SwingSubsystem {
 
         // Add text fields only once
         if (!playerFieldsAdded) {
-            usernameField = new JTextField(15);
-            passwordField = new JPasswordField(15);
+            /* usernameField = new JTextField(15);
+            passwordField = new JPasswordField(15); */
 
             // Set positions manually (absolute layout)
             panel.setLayout(null);
@@ -1064,6 +1076,7 @@ public class SwingSubsystem {
                 player1ErrorMessage = "Both name and password must be 1 to 50 characters. Please try again.";
                 mouseReady = true;
                 return;
+            }          
             }
 
             // Remove fields when done
@@ -1130,6 +1143,39 @@ public class SwingSubsystem {
         }
         if (!roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
             mouseReady = true;
+        }
+    }
+
+    public void gameMusic(String gameScreen) {
+        switch (gameScreen) {
+            case "startScreen":
+                if (musicReady) {
+                    try {
+                        AudioInputStream menuSong = AudioSystem.getAudioInputStream(
+                                new File("T:\\BAN-ICS3U1-1\\COMMON\\thom4240\\Battleship-Grade11\\menuSong.wav"));
+                        menuMusicClip = AudioSystem.getClip();
+                        menuMusicClip.open(menuSong);
+                    } catch (Exception e) {
+                        System.out.println(e + ". Not working");
+                    }
+                    menuMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    musicReady = false;
+                }
+                break;
+            default:
+                if (musicReady) {
+                    try {
+                        AudioInputStream gameSong = AudioSystem.getAudioInputStream(
+                                new File("T:\\BAN-ICS3U1-1\\COMMON\\thom4240\\Battleship-Grade11\\gameSong.wav"));
+                        gameMusicClip = AudioSystem.getClip();
+                        gameMusicClip.open(gameSong);
+                    } catch (Exception e) {
+                        System.out.println(e + ". Not working");
+                    }
+                    gameMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    musicReady = false;
+                }
+                break;
         }
     }
 }
