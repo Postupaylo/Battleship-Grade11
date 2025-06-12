@@ -194,10 +194,18 @@ public class SwingSubsystem {
 
     public void draw(Graphics g) {
         g.drawImage(backgroundImage, 0, 0, frame.getWidth() + 5, frame.getHeight() + 5, null);
-        gameController.switchScreen(g);
+        if (player1Score == maxScore) {
+            // player 1 score win yaya win yippe!!
+            System.out.println("PLAYER 1 WONG!!!!");
+        } else if (player2Score == maxScore) {
+            // player 2 won aidk d al like so cool! {insert xeena quote}
+            System.out.println("PLAYER 2 GOASMDA  THA GOAT");
+        } else {
+            gameController.switchScreen(g);
+        }
         gameMusic(gameController.gameScreen);
         panel.repaint();
-    }
+    } // your phone linging, pic up da pone
 
     public class GameController {
 
@@ -219,6 +227,7 @@ public class SwingSubsystem {
         public final String player2Grid = "player2Grid";
         public final String player1SecondGrid = "player1SecondGrid";
         public final String player2SecondGrid = "player2SecondGrid";
+        public int delayTime = 1000;
 
         public GameController() {
         }
@@ -232,6 +241,17 @@ public class SwingSubsystem {
                     modeSelectMenu(g);
                     break;
                 case enterPlayer1Details:
+                    if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
+                        mouseReady = false;
+                        gameController.gameScreen = gameController.startMenu;
+
+                        try {
+                            gameMusicClip.stop();
+                        } catch (Exception e) {
+                            System.out.println(e + ". (modeSelectMenu method)");
+                        }
+                        musicReady = true;
+                    }
                     player1Pass = getPlayerDetails(g);
                     break;
                 case enterPlayer2Details:
@@ -245,7 +265,9 @@ public class SwingSubsystem {
                             Color.black,
                             true);
                     if (roundedRectButton(g, frame.getWidth() - 250, 50, 200, 100, "Ready", Color.black,
-                            Color.white, 30, 20)) {
+                            Color.white, 30, 20) && playerData1.destroyer.doRender && playerData1.submarine.doRender
+                            && playerData1.cruiser.doRender && playerData1.battleship.doRender
+                            && playerData1.carrier.doRender) {
                         gameController.gameScreen = gameController.checkPrePlayer2Details;
                     }
                     playerData1.shipSelector(g, frame.getWidth() / 2 + 700 / 2 + 250 / 2 + 30,
@@ -262,7 +284,9 @@ public class SwingSubsystem {
                             true);
 
                     if (roundedRectButton(g, frame.getWidth() - 250, 50, 200, 100, "Ready", Color.black,
-                            Color.white, 30, 20)) {
+                            Color.white, 30, 20) && playerData2.destroyer.doRender && playerData2.submarine.doRender
+                            && playerData2.cruiser.doRender && playerData2.battleship.doRender
+                            && playerData2.carrier.doRender) {
                         gameScreen = checkPlayer1Details;
                     }
                     playerData2.shipSelector(g, frame.getWidth() / 2 + 700 / 2 + 250 / 2 + 30,
@@ -362,9 +386,16 @@ public class SwingSubsystem {
                             20, Color.black,
                             Color.black,
                             true, playerData2.getAttemptedX(), playerData2.getAttemptedY(), 2)) {
-                        hasPlayer2Shot = false;
-                        hasPlayer1Shot = true;
-                        gameScreen = checkPlayer2Details;
+
+                        Timer timer = new Timer(delayTime, e -> {
+                            hasPlayer2Shot = false;
+                            hasPlayer1Shot = true;
+                            gameScreen = checkPlayer2Details;
+
+                            ((Timer) e.getSource()).stop(); // Stop after first run
+                        });
+                        timer.start();
+
                     }
 
                     scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50,
@@ -404,9 +435,15 @@ public class SwingSubsystem {
                             20, Color.black,
                             Color.black,
                             true, playerData1.getAttemptedX(), playerData1.getAttemptedY(), 1)) {
-                        hasPlayer2Shot = true;
-                        hasPlayer1Shot = false;
-                        gameScreen = checkPlayer1Details;
+
+                        Timer timer = new Timer(delayTime, e -> {
+                            hasPlayer2Shot = true;
+                            hasPlayer1Shot = false;
+                            gameScreen = checkPlayer1Details;
+
+                            ((Timer) e.getSource()).stop(); // Stop after first run
+                        });
+                        timer.start();
                     }
 
                     scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50,
@@ -524,8 +561,6 @@ public class SwingSubsystem {
                             (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell,
                             height / yCell);
 
-                    
-
                     if (destroyer.doRender) {
                         for (int destroyerIndex = 0; destroyerIndex < destroyer.shipLength; destroyerIndex++) {
                             g.setColor(destroyer.shipColor);
@@ -588,8 +623,6 @@ public class SwingSubsystem {
 
                         }
                     }
-
-                    
 
                     if (mouseX > (x - (width / 2) - xCell + (xIndex * (width / xCell)))
                             && mouseX < (x - (width / 2) - xCell + (xIndex * (width / xCell))) + width / xCell) {
@@ -723,21 +756,17 @@ public class SwingSubsystem {
                         }
                     }
 
-                
-                if (shots.contains(cell)) {
+                    if (shots.contains(cell)) {
                         drawnHitPoints.add(cell);
                     }
 
-                for(Point cell2: drawnHitPoints){
-                    boolean hit = shipCells.contains(cell2);
+                    for (Point cell2 : drawnHitPoints) {
+                        boolean hit = shipCells.contains(cell2);
                         crossColor = hit ? Color.red : Color.blue;
-                     drawCenteredText(g, "X", startX + (int) cell2.getX() * cellWidth + cellWidth / 2, startY + (int) cell2.getY() * cellHeight + cellHeight + 12, 50, crossColor,
+                        drawCenteredText(g, "X", startX + (int) cell2.getX() * cellWidth + cellWidth / 2,
+                                startY + (int) cell2.getY() * cellHeight + cellHeight + 12, 50, crossColor,
                                 "Arial");
-                }
-
-
-
-
+                    }
 
                 }
 
@@ -1333,9 +1362,11 @@ public class SwingSubsystem {
     public void startMenu(Graphics g) {
         panel.setBackground(Color.ORANGE);
         drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
+        drawCenteredText(g, "Click anywhere to continue", frame.getWidth() / 2, frame.getHeight() / 2, 60, Color.black,
+                "Arial");
         if (mousePressed && mouseReady) {
             mouseReady = false;
-            gameController.gameScreen = gameController.modeMenu;
+            gameController.gameScreen = gameController.enterPlayer1Details;
             try {
                 menuMusicClip.stop();
             } catch (Exception e) {

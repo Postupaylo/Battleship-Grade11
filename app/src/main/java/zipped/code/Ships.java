@@ -5,7 +5,7 @@ import java.awt.Color;
 public class Ships {
 
     class Destroyer {
-        Color shipColor = Color.red;
+        Color shipColor = Color.blue;
         int shipLength = 2;
         boolean doRender = false;
         int[] xPositions = new int[shipLength];
