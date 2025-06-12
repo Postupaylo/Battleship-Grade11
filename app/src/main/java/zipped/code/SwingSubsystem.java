@@ -44,7 +44,6 @@ public class SwingSubsystem {
     boolean hasPlayer2Shot = false;
     String shipMode = "carrier";
     String shipDirection = "up";
-    String textInput = "";
     Ships.Destroyer destroyer;
     Ships.Submarine submarine;
     Ships.Cruiser cruiser;
@@ -127,7 +126,6 @@ public class SwingSubsystem {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                mouseReady = true;
                 mousePressed = false; // Mouse is released
                 cellPressed = false;
                 panel.repaint();
@@ -172,6 +170,7 @@ public class SwingSubsystem {
 
         panel.setFocusable(true);
         panel.requestFocusInWindow();
+        panel.setBackground(Color.blue);
         panel.setBackground(Color.blue);
 
         frame.setIconImage(grug);
@@ -1447,7 +1446,7 @@ public class SwingSubsystem {
         int textX = x + (width - textWidth) / 2;
         int textY = y + (height - textHeight) / 2 + metrics.getAscent();
         g.drawString(label, textX, textY);
-        return withinBoundaries(mouseX, mouseY, x, y, width, height) && mousePressed && mouseReady;
+        return withinBoundaries(mouseX, mouseY, x, y, width, height) && mousePressed;
     }
 
     public boolean roundedRectButton(Graphics g, int x, int y, int width, int height, String label,
