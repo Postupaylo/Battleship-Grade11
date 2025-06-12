@@ -33,6 +33,8 @@ public class SwingSubsystem {
     int overAmount;
     int player1Score;
     int player2Score;
+    int tempScore = 0;
+    int maxScore = 17;
     boolean keyPressed;
     boolean keyReady;
     boolean musicReady = true;
@@ -91,7 +93,7 @@ public class SwingSubsystem {
             System.out.println("NO IMAGE FOUND!");
         }
 
-         try {
+        try {
             backgroundImage = ImageIO.read(new File("waterbackground.jpg"));
         } catch (Exception e) {
             System.out.println("NO IMAGE FOUND!");
@@ -236,6 +238,8 @@ public class SwingSubsystem {
                     player2Pass = getPlayer2Details(g);
                     break;
                 case player1ShipSelector:
+                    drawCenteredText(g, "Player 1's Ship Selector", frame.getWidth() / 2,
+                            50, 30, Color.BLACK, "Arial");
                     playerData1.drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10,
                             10, Color.black,
                             Color.black,
@@ -250,6 +254,8 @@ public class SwingSubsystem {
 
                     break;
                 case player2ShipSelector:
+                    drawCenteredText(g, "Player 2's Ship Selector", frame.getWidth() / 2,
+                            50, 30, Color.BLACK, "Arial");
                     playerData2.drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10,
                             10, Color.black,
                             Color.black,
@@ -325,6 +331,9 @@ public class SwingSubsystem {
                             Color.black, "Arial");
                     break;
                 case player1Grid:
+
+                    drawCenteredText(g, "Player 1's Grid", frame.getWidth() / 2,
+                            50, 30, Color.BLACK, "Arial");
                     playerData1.setEnemyShips(playerData2.destroyer, playerData2.submarine, playerData2.cruiser,
                             playerData2.battleship, playerData2.carrier);
                     playerData2.setEnemyShips(playerData1.destroyer, playerData1.submarine, playerData1.cruiser,
@@ -340,7 +349,7 @@ public class SwingSubsystem {
                     scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50,
                             frame.getHeight() / 2 - 700 / 2 + 100 / 2,
 
-                            180, 100, player1Score);
+                            180, 100, player1Score, 1);
                     break;
                 case player1SecondGrid:
                     playerData2.hasShot = false;
@@ -350,16 +359,23 @@ public class SwingSubsystem {
                     }
 
                     if (playerData1.drawEnemyGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10,
-                            10, Color.black,
+                            20, Color.black,
                             Color.black,
-                            true, playerData2.getAttemptedX(), playerData2.getAttemptedY())) {
+                            true, playerData2.getAttemptedX(), playerData2.getAttemptedY(), 2)) {
                         hasPlayer2Shot = false;
                         hasPlayer1Shot = true;
                         gameScreen = checkPlayer2Details;
                     }
 
+                    scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50,
+                            frame.getHeight() / 2 - 700 / 2 + 100 / 2,
+
+                            180, 100, player1Score, 1);
+
                     break;
                 case player2Grid:
+                    drawCenteredText(g, "Player 2's Grid", frame.getWidth() / 2,
+                            50, 30, Color.BLACK, "Arial");
                     playerData1.setEnemyShips(playerData2.destroyer, playerData2.submarine, playerData2.cruiser,
                             playerData2.battleship, playerData2.carrier);
                     playerData2.setEnemyShips(playerData1.destroyer, playerData1.submarine, playerData1.cruiser,
@@ -375,7 +391,7 @@ public class SwingSubsystem {
                     scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50,
                             frame.getHeight() / 2 - 700 / 2 + 100 / 2,
 
-                            180, 100, player2Score);
+                            180, 100, player2Score, 1);
                     break;
                 case player2SecondGrid:
                     playerData1.hasShot = false;
@@ -385,13 +401,18 @@ public class SwingSubsystem {
                     }
 
                     if (playerData2.drawEnemyGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10,
-                            10, Color.black,
+                            20, Color.black,
                             Color.black,
-                            true, playerData1.getAttemptedX(), playerData1.getAttemptedY())) {
+                            true, playerData1.getAttemptedX(), playerData1.getAttemptedY(), 1)) {
                         hasPlayer2Shot = true;
                         hasPlayer1Shot = false;
                         gameScreen = checkPlayer1Details;
                     }
+
+                    scoreboard(g, frame.getWidth() / 2 - 700 / 2 - 180 / 2 - 50,
+                            frame.getHeight() / 2 - 700 / 2 + 100 / 2,
+
+                            180, 100, player1Score, 1);
 
                     break;
             }
@@ -404,6 +425,8 @@ public class SwingSubsystem {
         List<Integer> attemptedX = new ArrayList<>();
         List<Integer> attemptedY = new ArrayList<>();
 
+        List<Point> drawnHitPoints = new ArrayList<>();
+
         Ships.Destroyer destroyer;
         Ships.Submarine submarine;
         Ships.Cruiser cruiser;
@@ -415,6 +438,8 @@ public class SwingSubsystem {
         Ships.Cruiser cruiser2;
         Ships.Battleship battleship2;
         Ships.Carrier carrier2;
+
+        Color crossColor;
 
         public PlayerData(Ships.Destroyer destroyer, Ships.Submarine submarine, Ships.Cruiser cruiser,
                 Ships.Battleship battleship, Ships.Carrier carrier) {
@@ -499,13 +524,7 @@ public class SwingSubsystem {
                             (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell,
                             height / yCell);
 
-                    if (shots.contains(cell)) {
-                        boolean hit = shipCells.contains(cell);
-                        Color textColor = hit ? Color.red : Color.blue;
-                        drawCenteredText(g, "X", cellX + cellWidth / 2, cellY + cellHeight + 12, 50, textColor,
-                                "Arial");
-
-                    }
+                    
 
                     if (destroyer.doRender) {
                         for (int destroyerIndex = 0; destroyerIndex < destroyer.shipLength; destroyerIndex++) {
@@ -569,6 +588,8 @@ public class SwingSubsystem {
 
                         }
                     }
+
+                    
 
                     if (mouseX > (x - (width / 2) - xCell + (xIndex * (width / xCell)))
                             && mouseX < (x - (width / 2) - xCell + (xIndex * (width / xCell))) + width / xCell) {
@@ -701,6 +722,22 @@ public class SwingSubsystem {
                             }
                         }
                     }
+
+                
+                if (shots.contains(cell)) {
+                        drawnHitPoints.add(cell);
+                    }
+
+                for(Point cell2: drawnHitPoints){
+                    boolean hit = shipCells.contains(cell2);
+                        crossColor = hit ? Color.red : Color.blue;
+                     drawCenteredText(g, "X", startX + (int) cell2.getX() * cellWidth + cellWidth / 2, startY + (int) cell2.getY() * cellHeight + cellHeight + 12, 50, crossColor,
+                                "Arial");
+                }
+
+
+
+
 
                 }
 
@@ -1162,12 +1199,13 @@ public class SwingSubsystem {
         public boolean drawEnemyGrid(Graphics g, int x, int y, int width, int height, int xCell, int yCell,
                 int lineThickness,
                 Color lineColor, Color cellColor, boolean doHoverEffect, List<Integer> enemyShotsX,
-                List<Integer> enemyShotsY) {
+                List<Integer> enemyShotsY, int player) {
 
             int cellWidth = width / xCell;
             int cellHeight = height / yCell;
             int startX = x - width / 2 - xCell;
             int startY = y - height / 2 - yCell;
+            tempScore = 0;
 
             // Convert to sets for fast lookup
             Set<Point> shots = new HashSet<>();
@@ -1209,29 +1247,29 @@ public class SwingSubsystem {
                     int cellX = startX + xIndex * cellWidth;
                     int cellY = startY + yIndex * cellHeight;
 
+                    Point cell = new Point(xIndex, yIndex);
+
                     g.setColor(cellColor);
                     g.drawRect(cellX, cellY, cellWidth, cellHeight);
 
-                    Point cell = new Point(xIndex, yIndex);
-
                     if (attemptedShots.contains(cell)) {
+                        drawnHitPoints.add(cell);
                         g.setColor(Color.black);
                         g.fillRect(cellX, cellY, cellWidth, cellHeight);
                         boolean hit = shipCells.contains(cell);
                         Color textColor = hit ? Color.red : Color.blue;
+                        if (hit)
+                            tempScore++;
                         drawCenteredText(g, "X", cellX + cellWidth / 2, cellY + cellHeight + 12, 50, textColor,
                                 "Arial");
 
                     }
-                    // else if (shots.contains(cell)) {
-                    // g.setColor(Color.black);
-                    // g.fillRect(cellX, cellY, cellWidth, cellHeight);
-                    // boolean hit = shipCells.contains(cell);
-                    // Color textColor = hit ? Color.red : Color.blue;
-                    // drawCenteredText(g, "X", cellX + cellWidth / 2, cellY + cellHeight + 12, 50,
-                    // textColor,
-                    // "Arial");
-                    // }
+
+                    if (player == 1) {
+                        player1Score = tempScore;
+                    } else if (player == 2) {
+                        player2Score = tempScore;
+                    }
 
                     if (mouseX > cellX && mouseX < cellX + cellWidth &&
                             mouseY > cellY && mouseY < cellY + cellHeight) {
@@ -1248,6 +1286,7 @@ public class SwingSubsystem {
                     }
                 }
             }
+
             return hasShot;
         }
         // endregion
@@ -1383,10 +1422,15 @@ public class SwingSubsystem {
         return player2Pass;
     }
 
-    public void scoreboard(Graphics g, int x, int y, int width, int height, int score) {
+    public void scoreboard(Graphics g, int x, int y, int width, int height, int score, int player) {
         drawRect(g, x, y, width, height, Color.BLACK, true);
         drawCenteredText(g, "Score:", x, y, 20, Color.BLACK, "Arial");
         drawCenteredText(g, String.valueOf(score), x, y + 35, 20, Color.BLACK, "Arial");
+        if (player == 1) {
+            player1Score = tempScore;
+        } else if (player == 2) {
+            player1Score = tempScore;
+        }
     }
 
     public void print(Graphics g, String text) {
@@ -1488,7 +1532,8 @@ public class SwingSubsystem {
         int textY = y + (height - textHeight) / 2 + metrics.getAscent();
         g.drawString(label, textX, textY);
         // System.out.println(
-        //         withinBoundaries(mouseX, mouseY, x, y, width, height) + " | " + mousePressed + " | " + mouseReady);
+        // withinBoundaries(mouseX, mouseY, x, y, width, height) + " | " + mousePressed
+        // + " | " + mouseReady);
         return withinBoundaries(mouseX, mouseY, x, y, width, height) && mousePressed && mouseReady;
     }
 
@@ -1598,7 +1643,7 @@ public class SwingSubsystem {
         return x > objectX && x < objectX + width && y > objectY && y < objectY + height;
     }
 
-     public void gameMusic(String gameScreen) {
+    public void gameMusic(String gameScreen) {
         switch (gameScreen) {
             case "startMenu":
                 if (musicReady) {
