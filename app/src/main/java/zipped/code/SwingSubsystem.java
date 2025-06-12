@@ -44,6 +44,7 @@ public class SwingSubsystem {
     boolean hasPlayer2Shot = false;
     String shipMode = "carrier";
     String shipDirection = "up";
+    String textInput = "";
     Ships.Destroyer destroyer;
     Ships.Submarine submarine;
     Ships.Cruiser cruiser;
@@ -126,6 +127,7 @@ public class SwingSubsystem {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                mouseReady = true;
                 mousePressed = false; // Mouse is released
                 cellPressed = false;
                 panel.repaint();
