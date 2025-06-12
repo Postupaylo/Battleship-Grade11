@@ -35,8 +35,8 @@ public class SwingSubsystem {
     boolean keyPressed;
     boolean keyReady;
     boolean musicReady = true;
-    boolean mouseReady = true;
     boolean mousePressed;
+    boolean mouseReady = true;
     boolean cellPressed;
     boolean switchBoat;
     boolean isFocused = false;
@@ -157,7 +157,6 @@ public class SwingSubsystem {
                         textInput += String.valueOf(e.getKeyChar());
                         break;
                 }
-
                 if (e.getKeyCode() == KeyEvent.VK_R && keyReady) {
                     keyReady = false;
                     keyIndex++;
@@ -173,7 +172,7 @@ public class SwingSubsystem {
 
         panel.setFocusable(true);
         panel.requestFocusInWindow();
-        panel.setBackground(Color.red);
+        panel.setBackground(Color.blue);
 
         frame.setIconImage(grug);
         frame.add(panel);
@@ -268,7 +267,7 @@ public class SwingSubsystem {
                         }
                     }
                     drawCenteredText(g, errorMessage, frame.getWidth() / 2, frame.getHeight() - 100, 30,
-                                    Color.black, "Arial");
+                            Color.black, "Arial");
                     break;
                 case checkPlayer2Details:
                     String tempPass4 = checkPlayer2Details(g);
@@ -283,7 +282,7 @@ public class SwingSubsystem {
                         }
                     }
                     drawCenteredText(g, errorMessage, frame.getWidth() / 2, frame.getHeight() - 100, 30,
-                                    Color.black, "Arial");
+                            Color.black, "Arial");
                     break;
                 case checkPrePlayer1Details:
                     String tempPass = checkPlayer1Details(g);
@@ -298,7 +297,7 @@ public class SwingSubsystem {
                         }
                     }
                     drawCenteredText(g, errorMessage, frame.getWidth() / 2, frame.getHeight() - 100, 30,
-                                    Color.black, "Arial");
+                            Color.black, "Arial");
                     break;
                 case checkPrePlayer2Details:
                     String tempPass2 = checkPlayer2Details(g);
@@ -313,7 +312,7 @@ public class SwingSubsystem {
                         }
                     }
                     drawCenteredText(g, errorMessage, frame.getWidth() / 2, frame.getHeight() - 100, 30,
-                                    Color.black, "Arial");
+                            Color.black, "Arial");
                     break;
                 case player1Grid:
                     playerData1.setEnemyShips(playerData2.destroyer, playerData2.submarine, playerData2.cruiser,
@@ -323,7 +322,7 @@ public class SwingSubsystem {
                     playerData1.drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10,
                             10, Color.black,
                             Color.black,
-                            true,playerData2.getAttemptedX(), playerData2.getAttemptedY());
+                            true, playerData2.getAttemptedX(), playerData2.getAttemptedY());
                     if (roundedRectButton(g, frame.getWidth() - 250, 50, 200, 100, "Enemy Grid", Color.black,
                             Color.white, 30, 20)) {
                         gameController.gameScreen = gameController.player1SecondGrid;
@@ -358,7 +357,7 @@ public class SwingSubsystem {
                     playerData2.drawGrid(g, frame.getWidth() / 2, frame.getHeight() / 2, 700, 700, 10, 10,
                             10, Color.black,
                             Color.black,
-                            true,playerData1.getAttemptedX(), playerData1.getAttemptedY());
+                            true, playerData1.getAttemptedX(), playerData1.getAttemptedY());
                     if (roundedRectButton(g, frame.getWidth() - 250, 50, 200, 100, "Enemy Grid", Color.black,
                             Color.white, 30, 20)) {
                         gameController.gameScreen = gameController.player2SecondGrid;
@@ -457,24 +456,27 @@ public class SwingSubsystem {
                 Color lineColor, Color cellColor, boolean doHoverEffect, List<Integer> enemyShotsX,
                 List<Integer> enemyShotsY) {
 
-                    int cellWidth = width / xCell;
+            int cellWidth = width / xCell;
             int cellHeight = height / yCell;
             int startX = x - width / 2 - xCell;
             int startY = y - height / 2 - yCell;
 
-                    Set<Point> shots = new HashSet<>();
+            Set<Point> shots = new HashSet<>();
             for (int i = 0; i < enemyShotsX.size(); i++) {
                 shots.add(new Point(enemyShotsX.get(i), enemyShotsY.get(i)));
             }
 
-            
-
             Set<Point> shipCells = new HashSet<>();
-            for (int i = 0; i < destroyer.shipLength; i++) shipCells.add(new Point(destroyer.xPositions[i], destroyer.yPositions[i]));
-            for (int i = 0; i < submarine.shipLength; i++) shipCells.add(new Point(submarine.xPositions[i], submarine.yPositions[i]));
-            for (int i = 0; i < cruiser.shipLength; i++) shipCells.add(new Point(cruiser.xPositions[i], cruiser.yPositions[i]));
-            for (int i = 0; i < battleship.shipLength; i++) shipCells.add(new Point(battleship.xPositions[i], battleship.yPositions[i]));
-            for (int i = 0; i < carrier.shipLength; i++) shipCells.add(new Point(carrier.xPositions[i], carrier.yPositions[i]));
+            for (int i = 0; i < destroyer.shipLength; i++)
+                shipCells.add(new Point(destroyer.xPositions[i], destroyer.yPositions[i]));
+            for (int i = 0; i < submarine.shipLength; i++)
+                shipCells.add(new Point(submarine.xPositions[i], submarine.yPositions[i]));
+            for (int i = 0; i < cruiser.shipLength; i++)
+                shipCells.add(new Point(cruiser.xPositions[i], cruiser.yPositions[i]));
+            for (int i = 0; i < battleship.shipLength; i++)
+                shipCells.add(new Point(battleship.xPositions[i], battleship.yPositions[i]));
+            for (int i = 0; i < carrier.shipLength; i++)
+                shipCells.add(new Point(carrier.xPositions[i], carrier.yPositions[i]));
 
             for (int xIndex = 0; xIndex < xCell; xIndex++) {
                 for (int yIndex = 0; yIndex < yCell; yIndex++) {
@@ -487,7 +489,7 @@ public class SwingSubsystem {
                             (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell,
                             height / yCell);
 
-                             if(shots.contains(cell)){
+                    if (shots.contains(cell)) {
                         boolean hit = shipCells.contains(cell);
                         Color textColor = hit ? Color.red : Color.blue;
                         drawCenteredText(g, "X", cellX + cellWidth / 2, cellY + cellHeight + 12, 50, textColor,
@@ -495,7 +497,6 @@ public class SwingSubsystem {
 
                     }
 
-
                     if (destroyer.doRender) {
                         for (int destroyerIndex = 0; destroyerIndex < destroyer.shipLength; destroyerIndex++) {
                             g.setColor(destroyer.shipColor);
@@ -558,8 +559,6 @@ public class SwingSubsystem {
 
                         }
                     }
-                     
-
 
                     if (mouseX > (x - (width / 2) - xCell + (xIndex * (width / xCell)))
                             && mouseX < (x - (width / 2) - xCell + (xIndex * (width / xCell))) + width / xCell) {
@@ -692,30 +691,25 @@ public class SwingSubsystem {
                             }
                         }
                     }
-                   
-                    
+
                 }
-                
+
             }
         }
 
-
-
-         public void drawGrid(Graphics g, int x, int y, int width, int height, int xCell, int yCell,
+        public void drawGrid(Graphics g, int x, int y, int width, int height, int xCell, int yCell,
                 int lineThickness,
                 Color lineColor, Color cellColor, boolean doHoverEffect) {
 
-                  
             for (int xIndex = 0; xIndex < xCell; xIndex++) {
                 for (int yIndex = 0; yIndex < yCell; yIndex++) {
-                    
+
                     g.setColor(cellColor);
                     ((Graphics2D) g).setStroke(new BasicStroke(5));
                     g.drawRect((x - (width / 2) - xCell + (xIndex * (width / xCell))),
                             (y - (height / 2) - yCell + (yIndex * (height / yCell))), width / xCell,
                             height / yCell);
 
-
                     if (destroyer.doRender) {
                         for (int destroyerIndex = 0; destroyerIndex < destroyer.shipLength; destroyerIndex++) {
                             g.setColor(destroyer.shipColor);
@@ -912,6 +906,7 @@ public class SwingSubsystem {
                 }
             }
         }
+
         // endregion
         // region Set Ship Rotations
         public void setShipPosition(int xCell, int yCell, int xIndex,
@@ -1176,18 +1171,28 @@ public class SwingSubsystem {
             }
 
             Set<Point> shipCells = new HashSet<>();
-            for (int i = 0; i < destroyer.shipLength; i++) shipCells.add(new Point(destroyer.xPositions[i], destroyer.yPositions[i]));
-            for (int i = 0; i < submarine.shipLength; i++) shipCells.add(new Point(submarine.xPositions[i], submarine.yPositions[i]));
-            for (int i = 0; i < cruiser.shipLength; i++) shipCells.add(new Point(cruiser.xPositions[i], cruiser.yPositions[i]));
-            for (int i = 0; i < battleship.shipLength; i++) shipCells.add(new Point(battleship.xPositions[i], battleship.yPositions[i]));
-            for (int i = 0; i < carrier.shipLength; i++) shipCells.add(new Point(carrier.xPositions[i], carrier.yPositions[i]));
+            for (int i = 0; i < destroyer.shipLength; i++)
+                shipCells.add(new Point(destroyer.xPositions[i], destroyer.yPositions[i]));
+            for (int i = 0; i < submarine.shipLength; i++)
+                shipCells.add(new Point(submarine.xPositions[i], submarine.yPositions[i]));
+            for (int i = 0; i < cruiser.shipLength; i++)
+                shipCells.add(new Point(cruiser.xPositions[i], cruiser.yPositions[i]));
+            for (int i = 0; i < battleship.shipLength; i++)
+                shipCells.add(new Point(battleship.xPositions[i], battleship.yPositions[i]));
+            for (int i = 0; i < carrier.shipLength; i++)
+                shipCells.add(new Point(carrier.xPositions[i], carrier.yPositions[i]));
 
             Set<Point> EnemyShipCells = new HashSet<>();
-            for (int i = 0; i < destroyer.shipLength; i++) shipCells.add(new Point(destroyer2.xPositions[i], destroyer2.yPositions[i]));
-            for (int i = 0; i < submarine.shipLength; i++) shipCells.add(new Point(submarine2.xPositions[i], submarine2.yPositions[i]));
-            for (int i = 0; i < cruiser.shipLength; i++) shipCells.add(new Point(cruiser2.xPositions[i], cruiser2.yPositions[i]));
-            for (int i = 0; i < battleship.shipLength; i++) shipCells.add(new Point(battleship2.xPositions[i], battleship2.yPositions[i]));
-            for (int i = 0; i < carrier.shipLength; i++) shipCells.add(new Point(carrier2.xPositions[i], carrier2.yPositions[i]));
+            for (int i = 0; i < destroyer.shipLength; i++)
+                shipCells.add(new Point(destroyer2.xPositions[i], destroyer2.yPositions[i]));
+            for (int i = 0; i < submarine.shipLength; i++)
+                shipCells.add(new Point(submarine2.xPositions[i], submarine2.yPositions[i]));
+            for (int i = 0; i < cruiser.shipLength; i++)
+                shipCells.add(new Point(cruiser2.xPositions[i], cruiser2.yPositions[i]));
+            for (int i = 0; i < battleship.shipLength; i++)
+                shipCells.add(new Point(battleship2.xPositions[i], battleship2.yPositions[i]));
+            for (int i = 0; i < carrier.shipLength; i++)
+                shipCells.add(new Point(carrier2.xPositions[i], carrier2.yPositions[i]));
 
             for (int xIndex = 0; xIndex < xCell; xIndex++) {
                 for (int yIndex = 0; yIndex < yCell; yIndex++) {
@@ -1206,15 +1211,16 @@ public class SwingSubsystem {
                         Color textColor = hit ? Color.red : Color.blue;
                         drawCenteredText(g, "X", cellX + cellWidth / 2, cellY + cellHeight + 12, 50, textColor,
                                 "Arial");
-                                
+
                     }
-                    //  else if (shots.contains(cell)) {
-                    //     g.setColor(Color.black);
-                    //     g.fillRect(cellX, cellY, cellWidth, cellHeight);
-                    //     boolean hit = shipCells.contains(cell);
-                    //     Color textColor = hit ? Color.red : Color.blue;
-                    //     drawCenteredText(g, "X", cellX + cellWidth / 2, cellY + cellHeight + 12, 50, textColor,
-                    //             "Arial");
+                    // else if (shots.contains(cell)) {
+                    // g.setColor(Color.black);
+                    // g.fillRect(cellX, cellY, cellWidth, cellHeight);
+                    // boolean hit = shipCells.contains(cell);
+                    // Color textColor = hit ? Color.red : Color.blue;
+                    // drawCenteredText(g, "X", cellX + cellWidth / 2, cellY + cellHeight + 12, 50,
+                    // textColor,
+                    // "Arial");
                     // }
 
                     if (mouseX > cellX && mouseX < cellX + cellWidth &&
@@ -1303,7 +1309,7 @@ public class SwingSubsystem {
             mouseReady = false;
             gameController.gameScreen = gameController.player1ShipSelector;
         }
-        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13) && mouseReady) {
+        if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
             mouseReady = false;
             gameController.gameScreen = gameController.startMenu;
         }
@@ -1447,6 +1453,7 @@ public class SwingSubsystem {
     public boolean roundedRectButton(Graphics g, int x, int y, int width, int height, String label,
             Color buttonColor,
             Color textColor, int textSize, int arc) {
+
         g.setColor(buttonColor);
         g.fillRoundRect(x, y, width, height, arc, arc);
         g.setColor(textColor);
@@ -1458,6 +1465,7 @@ public class SwingSubsystem {
         int textX = x + (width - textWidth) / 2;
         int textY = y + (height - textHeight) / 2 + metrics.getAscent();
         g.drawString(label, textX, textY);
+        System.out.println(withinBoundaries(mouseX, mouseY, x, y, width, height) + " | " + mousePressed + " | " + mouseReady);
         return withinBoundaries(mouseX, mouseY, x, y, width, height) && mousePressed && mouseReady;
     }
 
