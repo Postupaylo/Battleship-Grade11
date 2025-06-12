@@ -23,6 +23,7 @@ public class SwingSubsystem {
     JPanel panel;
     Image image;
     Image grug;
+    Image backgroundImage;
     int mouseX;
     int mouseY;
     int gridX;
@@ -86,6 +87,12 @@ public class SwingSubsystem {
 
         try {
             grug = ImageIO.read(new File("ship.png"));
+        } catch (Exception e) {
+            System.out.println("NO IMAGE FOUND!");
+        }
+
+         try {
+            backgroundImage = ImageIO.read(new File("waterbackground.jpg"));
         } catch (Exception e) {
             System.out.println("NO IMAGE FOUND!");
         }
@@ -184,7 +191,9 @@ public class SwingSubsystem {
     }
 
     public void draw(Graphics g) {
+        g.drawImage(backgroundImage, 0, 0, frame.getWidth() + 5, frame.getHeight() + 5, null);
         gameController.switchScreen(g);
+        gameMusic(gameController.gameScreen);
         panel.repaint();
     }
 
@@ -1285,10 +1294,15 @@ public class SwingSubsystem {
     public void startMenu(Graphics g) {
         panel.setBackground(Color.ORANGE);
         drawCenteredText(g, "Battleship", frame.getWidth() / 2, 200, 100, Color.black, "Arial");
-        if (mousePressed) {
+        if (mousePressed && mouseReady) {
             mouseReady = false;
-            // menuMusicClip.stop();
             gameController.gameScreen = gameController.modeMenu;
+            try {
+                menuMusicClip.stop();
+            } catch (Exception e) {
+                System.out.println(e + ". (startMenu method)");
+            }
+            musicReady = true;
         }
     }
 
@@ -1313,6 +1327,13 @@ public class SwingSubsystem {
         if (roundedRectButton(g, 25, 25, 70, 35, "Back", Color.BLACK, Color.WHITE, 18, 13)) {
             mouseReady = false;
             gameController.gameScreen = gameController.startMenu;
+
+            try {
+                gameMusicClip.stop();
+            } catch (Exception e) {
+                System.out.println(e + ". (modeSelectMenu method)");
+            }
+            musicReady = true;
         }
     }
 
@@ -1448,7 +1469,7 @@ public class SwingSubsystem {
         int textX = x + (width - textWidth) / 2;
         int textY = y + (height - textHeight) / 2 + metrics.getAscent();
         g.drawString(label, textX, textY);
-        return withinBoundaries(mouseX, mouseY, x, y, width, height) && mousePressed;
+        return withinBoundaries(mouseX, mouseY, x, y, width, height) && mousePressed && mouseReady;
     }
 
     public boolean roundedRectButton(Graphics g, int x, int y, int width, int height, String label,
@@ -1466,7 +1487,8 @@ public class SwingSubsystem {
         int textX = x + (width - textWidth) / 2;
         int textY = y + (height - textHeight) / 2 + metrics.getAscent();
         g.drawString(label, textX, textY);
-        System.out.println(withinBoundaries(mouseX, mouseY, x, y, width, height) + " | " + mousePressed + " | " + mouseReady);
+        // System.out.println(
+        //         withinBoundaries(mouseX, mouseY, x, y, width, height) + " | " + mousePressed + " | " + mouseReady);
         return withinBoundaries(mouseX, mouseY, x, y, width, height) && mousePressed && mouseReady;
     }
 
@@ -1575,4 +1597,38 @@ public class SwingSubsystem {
     private boolean withinBoundaries(int x, int y, int objectX, int objectY, int width, int height) {
         return x > objectX && x < objectX + width && y > objectY && y < objectY + height;
     }
+
+     public void gameMusic(String gameScreen) {
+        switch (gameScreen) {
+            case "startMenu":
+                if (musicReady) {
+                    try {
+                        AudioInputStream menuSong = AudioSystem.getAudioInputStream(
+                                new File("menuSong.wav"));
+                        menuMusicClip = AudioSystem.getClip();
+                        menuMusicClip.open(menuSong);
+                        menuMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    } catch (Exception e) {
+                        System.out.println(e + ". menuSong problems");
+                    }
+                    musicReady = false;
+                }
+                break;
+            default:
+                if (musicReady) {
+                    try {
+                        AudioInputStream gameSong = AudioSystem.getAudioInputStream(
+                                new File("gameSong.wav"));
+                        gameMusicClip = AudioSystem.getClip();
+                        gameMusicClip.open(gameSong);
+                        gameMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                    } catch (Exception e) {
+                        System.out.println(e + ". gameSong problems");
+                    }
+                    musicReady = false;
+                }
+                break;
+        }
+    }
+
 }
